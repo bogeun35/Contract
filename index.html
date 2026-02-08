@@ -12,195 +12,221 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --surface-hover: #222633;
-    --border: #2a2e3d;
-    --border-active: #4a6cf7;
-    --text: #e4e6ed;
-    --text-dim: #8b8fa3;
-    --text-muted: #5c6078;
-    --accent: #4a6cf7;
-    --accent-glow: rgba(74, 108, 247, 0.15);
-    --success: #34d399;
-    --success-bg: rgba(52, 211, 153, 0.1);
-    --warning: #fbbf24;
-    --warning-bg: rgba(251, 191, 36, 0.1);
-    --danger: #f87171;
-    --danger-bg: rgba(248, 113, 113, 0.1);
-    --radius: 10px;
+    --bg: #f5f6fa;
+    --surface: #ffffff;
+    --surface-hover: #f8f9fc;
+    --border: #e2e5ed;
+    --border-active: #3b6cf7;
+    --text: #1e2634;
+    --text-dim: #5a6474;
+    --text-muted: #98a1b0;
+    --accent: #3b6cf7;
+    --accent-light: #eef2ff;
+    --accent-hover: #2c59e0;
+    --success: #0ea55a;
+    --success-bg: #edfaf3;
+    --warning: #e5960b;
+    --warning-bg: #fef8ec;
+    --danger: #e5453d;
+    --danger-bg: #fef0ef;
+    --radius: 8px;
     --radius-sm: 6px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
 
   body {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
     line-height: 1.5;
   }
 
+  /* Header */
   .header {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
-    padding: 20px 32px;
+    padding: 16px 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: sticky;
     top: 0;
     z-index: 100;
-    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-sm);
   }
-  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-left { display: flex; align-items: center; gap: 12px; }
   .header-icon {
-    width: 38px; height: 38px;
-    background: linear-gradient(135deg, var(--accent), #7c3aed);
+    width: 34px; height: 34px;
+    background: var(--accent);
     border-radius: var(--radius-sm);
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
+    font-size: 16px;
+    color: #fff;
   }
-  .header h1 { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
-  .header h1 span { color: var(--text-dim); font-weight: 400; font-size: 13px; margin-left: 10px; }
-  .header-actions { display: flex; gap: 10px; }
+  .header h1 { font-size: 16px; font-weight: 600; color: var(--text); }
+  .header h1 span { color: var(--text-muted); font-weight: 400; font-size: 12.5px; margin-left: 10px; }
+  .header-actions { display: flex; gap: 8px; }
 
+  /* Buttons */
   .btn {
-    display: inline-flex; align-items: center; gap: 7px;
-    padding: 9px 18px;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px;
     border: 1px solid var(--border); border-radius: var(--radius-sm);
     background: var(--surface); color: var(--text);
     font-family: inherit; font-size: 13px; font-weight: 500;
     cursor: pointer; transition: all 0.15s ease; white-space: nowrap;
   }
-  .btn:hover { background: var(--surface-hover); border-color: var(--text-muted); }
+  .btn:hover { background: var(--surface-hover); border-color: #ccd1dc; }
   .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .btn-primary:hover { background: #3b5de7; }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-  .btn-success { background: var(--success); border-color: var(--success); color: #0f1117; font-weight: 600; }
-  .btn-success:hover { background: #2bc48d; }
-  .btn-success:disabled { opacity: 0.4; cursor: not-allowed; }
-  .btn-icon { font-size: 15px; line-height: 1; }
+  .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; background: var(--accent); }
+  .btn-success { background: var(--success); border-color: var(--success); color: #fff; font-weight: 600; }
+  .btn-success:hover { background: #0c9450; }
+  .btn-success:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-icon { font-size: 14px; line-height: 1; }
 
+  /* Main */
   .main {
     max-width: 1400px;
     margin: 0 auto;
     padding: 24px 32px;
-    display: flex; flex-direction: column; gap: 20px;
+    display: flex; flex-direction: column; gap: 18px;
   }
 
+  /* Drop Zone */
   .drop-zone {
-    border: 2px dashed var(--border); border-radius: var(--radius);
-    padding: 48px 24px; text-align: center;
-    transition: all 0.2s ease; cursor: pointer;
-    position: relative; background: var(--surface);
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 44px 24px;
+    text-align: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    background: var(--surface);
   }
-  .drop-zone:hover, .drop-zone.drag-over { border-color: var(--accent); background: var(--accent-glow); }
-  .drop-zone.drag-over { transform: scale(1.005); }
-  .drop-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.7; }
-  .drop-text { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+  .drop-zone:hover { border-color: var(--accent); background: var(--accent-light); }
+  .drop-zone.drag-over { border-color: var(--accent); background: var(--accent-light); transform: scale(1.003); }
+  .drop-icon { font-size: 36px; margin-bottom: 10px; }
+  .drop-text { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
   .drop-hint { font-size: 12px; color: var(--text-muted); }
   .drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 
+  /* Stats */
   .stats-bar { display: flex; gap: 12px; flex-wrap: wrap; }
   .stat-card {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 14px 20px;
-    flex: 1; min-width: 140px; display: flex; align-items: center; gap: 12px;
+    border-radius: var(--radius); padding: 14px 20px;
+    flex: 1; min-width: 140px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: var(--shadow-sm);
   }
-  .stat-icon { font-size: 22px; opacity: 0.8; }
+  .stat-icon { font-size: 20px; }
   .stat-info { display: flex; flex-direction: column; }
-  .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  .stat-value { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+  .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.3px; }
+  .stat-value { font-size: 22px; font-weight: 700; color: var(--text); }
   .stat-value.success { color: var(--success); }
   .stat-value.warning { color: var(--warning); }
 
+  /* Section */
   .section {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
   }
   .section-header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 20px; border-bottom: 1px solid var(--border);
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    background: #fafbfd;
   }
-  .section-title { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .section-title { font-size: 13px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
   .section-badge {
-    background: var(--accent-glow); color: var(--accent);
+    background: var(--accent-light); color: var(--accent);
     font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
   }
 
+  /* File list */
   .file-list { max-height: 200px; overflow-y: auto; }
   .file-item {
-    display: flex; align-items: center; padding: 10px 20px;
-    border-bottom: 1px solid var(--border); gap: 12px; transition: background 0.1s;
+    display: flex; align-items: center; padding: 10px 18px;
+    border-bottom: 1px solid #f0f1f5; gap: 12px; transition: background 0.1s;
   }
   .file-item:last-child { border-bottom: none; }
-  .file-item:hover { background: var(--surface-hover); }
-  .file-num { font-size: 11px; color: var(--text-muted); min-width: 24px; text-align: center; }
-  .file-icon { font-size: 16px; }
-  .file-name { flex: 1; font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-item:hover { background: #f8f9fc; }
+  .file-num { font-size: 11px; color: var(--text-muted); min-width: 22px; text-align: center; }
+  .file-icon { font-size: 15px; }
+  .file-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .file-size { font-size: 11px; color: var(--text-muted); }
-  .file-status { font-size: 12px; padding: 2px 10px; border-radius: 10px; font-weight: 500; }
-  .file-status.pending { background: var(--surface-hover); color: var(--text-muted); }
+  .file-status { font-size: 11.5px; padding: 2px 10px; border-radius: 10px; font-weight: 500; }
+  .file-status.pending { background: #f0f1f5; color: var(--text-muted); }
   .file-status.processing { background: var(--warning-bg); color: var(--warning); }
   .file-status.done { background: var(--success-bg); color: var(--success); }
   .file-status.error { background: var(--danger-bg); color: var(--danger); }
   .file-remove {
     background: none; border: none; color: var(--text-muted);
-    cursor: pointer; font-size: 16px; padding: 2px 6px;
+    cursor: pointer; font-size: 15px; padding: 2px 6px;
     border-radius: 4px; transition: all 0.1s;
   }
   .file-remove:hover { background: var(--danger-bg); color: var(--danger); }
 
+  /* Results table */
   .table-wrap { overflow-x: auto; overflow-y: auto; max-height: 420px; }
   .table-wrap table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 1100px; }
   .table-wrap thead { position: sticky; top: 0; z-index: 2; }
   .table-wrap th {
-    background: #1e2130; color: var(--text-dim);
-    font-weight: 600; font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.4px; padding: 10px 12px; text-align: left;
+    background: #f5f6fa; color: var(--text-dim);
+    font-weight: 600; font-size: 11px;
+    letter-spacing: 0.3px; padding: 10px 12px; text-align: left;
     white-space: nowrap; border-bottom: 2px solid var(--border);
   }
   .table-wrap td {
-    padding: 9px 12px; border-bottom: 1px solid var(--border);
+    padding: 9px 12px; border-bottom: 1px solid #f0f1f5;
     white-space: nowrap; max-width: 200px; overflow: hidden; text-overflow: ellipsis;
+    color: var(--text);
   }
-  .table-wrap tr:hover td { background: var(--surface-hover); }
+  .table-wrap tr:hover td { background: #f8f9fc; }
   .table-wrap td.address { max-width: 280px; }
   .table-wrap .row-num { color: var(--text-muted); font-size: 11px; text-align: center; min-width: 30px; }
   .empty-state { padding: 50px 20px; text-align: center; color: var(--text-muted); font-size: 13px; }
-  .empty-state .empty-icon { font-size: 36px; margin-bottom: 10px; opacity: 0.5; }
+  .empty-state .empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
 
-  .progress-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; display: none; }
+  /* Progress */
+  .progress-bar { height: 3px; background: #eceef3; border-radius: 2px; overflow: hidden; display: none; }
   .progress-bar.active { display: block; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #7c3aed); border-radius: 2px; transition: width 0.3s ease; width: 0%; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #6e8efb); border-radius: 2px; transition: width 0.3s ease; width: 0%; }
 
+  /* Log */
   .log-area {
-    font-family: 'Consolas', 'Courier New', monospace;
+    font-family: 'Consolas', 'SF Mono', 'Courier New', monospace;
     font-size: 11.5px; padding: 12px 16px;
-    max-height: 120px; overflow-y: auto; line-height: 1.6; color: var(--text-dim);
+    max-height: 120px; overflow-y: auto; line-height: 1.65; color: var(--text-dim);
+    background: #fafbfd;
   }
   .log-line.success { color: var(--success); }
   .log-line.error { color: var(--danger); }
   .log-line.info { color: var(--accent); }
   .log-time { color: var(--text-muted); margin-right: 6px; }
 
-  /* Debug raw text viewer */
   .debug-toggle { font-size: 11px; padding: 4px 10px; }
   .debug-area {
     display: none; padding: 12px 16px; max-height: 200px; overflow-y: auto;
     font-family: 'Consolas', monospace; font-size: 11px; line-height: 1.5;
     color: var(--text-dim); white-space: pre-wrap; word-break: break-all;
-    background: #13151e;
+    background: #f5f6fa; border-bottom: 1px solid var(--border);
   }
   .debug-area.visible { display: block; }
 
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+  ::-webkit-scrollbar-thumb { background: #d4d7e0; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #b8bcc8; }
 
   @media (max-width: 768px) {
-    .header { padding: 14px 16px; }
+    .header { padding: 12px 16px; }
     .main { padding: 16px; }
     .header h1 span { display: none; }
   }
@@ -269,7 +295,7 @@
     <div class="section-header">
       <div class="section-title">📝 로그</div>
       <div style="display:flex;gap:8px;">
-        <button class="btn debug-toggle" onclick="toggleDebug()">Raw 텍스트 보기</button>
+        <button class="btn debug-toggle" onclick="toggleDebug()">Raw 텍스트</button>
         <button class="btn" onclick="clearLog()" style="font-size:11px; padding: 4px 10px;">지우기</button>
       </div>
     </div>
@@ -285,9 +311,6 @@
   let extractedData = [];
   let lastRawText = '';
 
-  // ============================================================
-  // 파일 입력 & 드래그앤드롭
-  // ============================================================
   const dropZone = document.getElementById('dropZone');
   const fileInput = document.getElementById('fileInput');
 
@@ -349,16 +372,13 @@
   }
 
   // ============================================================
-  // PDF 텍스트 추출 (PDF.js) - 개선된 버전
-  // 핵심: 각 텍스트 아이템을 Y좌표로 줄 그룹핑 후,
-  //       X좌표 간격으로 공백/탭을 적절히 삽입하여 라인 재구성
+  // PDF 텍스트 추출 (PDF.js) - Y좌표 그룹핑 + X간격 공백 삽입
   // ============================================================
   async function extractTextFromPDF(file) {
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
     const numPages = pdf.numPages;
 
-    // "계약체결일"이 포함된 페이지 찾기 (마지막부터 역순)
     let targetPage = null;
     for (let p = numPages; p >= 1; p--) {
       const page = await pdf.getPage(p);
@@ -369,29 +389,19 @@
         break;
       }
     }
-
-    if (!targetPage) {
-      // 못 찾으면 마지막 페이지 사용
-      targetPage = await pdf.getPage(numPages);
-    }
+    if (!targetPage) targetPage = await pdf.getPage(numPages);
 
     const content = await targetPage.getTextContent();
     const items = content.items;
-
     if (items.length === 0) return '';
 
-    // 1단계: 모든 아이템에서 x, y, width, text 추출
     const allItems = [];
     for (const item of items) {
       if (!item.str || item.str.trim() === '') continue;
-      const x = item.transform[4];
-      const y = item.transform[5];
-      const w = item.width || 0;
-      allItems.push({ x, y, w, text: item.str });
+      allItems.push({ x: item.transform[4], y: item.transform[5], w: item.width || 0, text: item.str });
     }
 
-    // 2단계: Y좌표로 줄 그룹핑 (Y값 차이가 3 이내면 같은 줄)
-    allItems.sort((a, b) => b.y - a.y || a.x - b.x);  // Y 내림차순, X 오름차순
+    allItems.sort((a, b) => b.y - a.y || a.x - b.x);
 
     const lines = [];
     let currentLine = [allItems[0]];
@@ -400,10 +410,8 @@
     for (let i = 1; i < allItems.length; i++) {
       const item = allItems[i];
       if (Math.abs(item.y - currentY) <= 3) {
-        // 같은 줄
         currentLine.push(item);
       } else {
-        // 새 줄
         lines.push([...currentLine]);
         currentLine = [item];
         currentY = item.y;
@@ -411,170 +419,112 @@
     }
     lines.push(currentLine);
 
-    // 3단계: 각 줄 내에서 X좌표 순서로 정렬 후, 간격에 따라 텍스트 합치기
     const reconstructedLines = [];
     for (const line of lines) {
       line.sort((a, b) => a.x - b.x);
-
       let lineText = '';
       for (let i = 0; i < line.length; i++) {
-        const item = line[i];
-        if (i === 0) {
-          lineText = item.text;
-        } else {
-          // 이전 아이템의 끝 위치와 현재 아이템 시작 위치의 간격
-          const prevItem = line[i - 1];
-          const prevEnd = prevItem.x + prevItem.w;
-          const gap = item.x - prevEnd;
-
-          // 간격이 충분하면 공백 추가 (폰트 크기의 약 30% 이상이면 공백)
-          if (gap > 3) {
-            lineText += ' ' + item.text;
-          } else {
-            lineText += item.text;
-          }
-        }
+        if (i === 0) { lineText = line[i].text; continue; }
+        const prevEnd = line[i - 1].x + line[i - 1].w;
+        const gap = line[i].x - prevEnd;
+        lineText += (gap > 3 ? ' ' : '') + line[i].text;
       }
       reconstructedLines.push(lineText.trim());
     }
-
     return reconstructedLines.join('\n');
   }
 
   // ============================================================
-  // 데이터 파싱 - 개선된 정규식
+  // 데이터 파싱
   // ============================================================
   function parseContractData(text) {
     const data = {};
     const lines = text.split('\n').map(l => l.trim()).filter(l => l);
-
-    // 디버그용 raw text 저장
     lastRawText = text;
 
-    // 헬퍼: 특정 키워드가 포함된 줄 찾기
-    function findLine(keyword) {
-      return lines.find(l => l.includes(keyword)) || '';
-    }
-    function findLines(keyword) {
-      return lines.filter(l => l.includes(keyword));
-    }
+    function findLine(kw) { return lines.find(l => l.includes(kw)) || ''; }
+    function findLines(kw) { return lines.filter(l => l.includes(kw)); }
 
-    // ---- 1. 계약체결일 ----
-    // 패턴: "계약체결일 2026 년 2월 3일" 또는 "계약체결일 2026 년 2 3"
+    // 1. 계약체결일
     const dateLine = findLine('계약체결일');
     let m = dateLine.match(/(\d{4})\s*년?\s*(\d{1,2})\s*월?\s*(\d{1,2})\s*일?/);
-    if (!m) {
-      // "2026 년 월 일" 형태에서 월/일이 별도 줄에 있을 수 있음
-      // 전체 텍스트에서 시도
-      m = text.match(/계약체결일[^\n]*?(\d{4})\s*년?[\s\S]*?(\d{1,2})\s*월?\s*(\d{1,2})\s*일?/);
-    }
-    data.contractDate = m ? `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}` : '';
+    if (!m) m = text.match(/계약체결일[^\n]*?(\d{4})\s*년?[\s\S]*?(\d{1,2})\s*월?\s*(\d{1,2})\s*일?/);
+    data.contractDate = m ? `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}` : '';
 
-    // ---- 2. 상호 & 대표자 ----
-    // 같은 줄: "상 호 고샅만두 대표자 전유주"
-    // 또는 별도 줄일 수 있음
+    // 2. 상호 & 대표자
     const storeLine = findLine('상 호') || findLine('상호');
     m = storeLine.match(/상\s*호\s+(.+?)\s+대표자\s+(\S+)/);
     if (m) {
       data.storeName = m[1].trim();
       data.representative = m[2].trim();
     } else {
-      // 상호와 대표자가 다른 줄에 있을 수 있음
-      // "고샅만두" 같은 값이 상호 라벨 근처에 있음
-      data.storeName = '';
-      data.representative = '';
-
-      // 상호 줄에서 "상 호" 제거하고 남은 텍스트
+      data.storeName = ''; data.representative = '';
       if (storeLine) {
         let cleaned = storeLine.replace(/상\s*호/, '').trim();
-        // "대표자" 앞까지가 상호
         const repIdx = cleaned.indexOf('대표자');
         if (repIdx >= 0) {
           data.storeName = cleaned.substring(0, repIdx).trim();
           data.representative = cleaned.substring(repIdx + 3).trim();
-        } else {
-          data.storeName = cleaned;
-        }
+        } else { data.storeName = cleaned; }
       }
-
-      // 대표자를 별도 줄에서 찾기
       if (!data.representative) {
-        const repLine = findLines('대표자').find(l => !l.includes('조정호') && !l.includes('상 호') && !l.includes('상호'));
-        if (repLine) {
-          m = repLine.match(/대표자\s+(\S+)/);
-          if (m && m[1] !== '조정호') data.representative = m[1];
-        }
-        // 그래도 없으면 첫 번째 대표자 값 (조정호 제외)
-        if (!data.representative) {
-          for (const l of findLines('대표자')) {
-            m = l.match(/대표자\s+(\S+)/);
-            if (m && m[1] !== '조정호') { data.representative = m[1]; break; }
-          }
+        for (const l of findLines('대표자')) {
+          m = l.match(/대표자\s+(\S+)/);
+          if (m && m[1] !== '조정호') { data.representative = m[1]; break; }
         }
       }
     }
 
-    // ---- 3. 매장전화번호 ----
+    // 3. 매장전화
     const phoneLine = findLine('매장전화번호');
     m = phoneLine.match(/매장전화번호\s+([\d\-]+)/);
     data.storePhone = m ? m[1] : '';
 
-    // ---- 4. 휴대전화번호 ----
+    // 4. 휴대전화
     m = (phoneLine || text).match(/휴대전화번호\s+([\d\-]+)/);
     data.mobilePhone = m ? m[1] : '';
 
-    // ---- 5. 주소 ----
+    // 5. 주소
     data.address = '';
-    const addrLines = findLines('주 소').concat(findLines('주소'));
-    for (const l of addrLines) {
-      const addrMatch = l.match(/주\s*소\s+(.+)/);
-      if (addrMatch) {
-        const addr = addrMatch[1].trim();
-        // 운영회사 주소 제외
+    for (const l of findLines('주 소').concat(findLines('주소'))) {
+      const am = l.match(/주\s*소\s+(.+)/);
+      if (am) {
+        const addr = am[1].trim();
         if (!addr.includes('강남구') && !addr.includes('삼성동') && !addr.includes('봉은사로') && addr.length > 5) {
-          data.address = addr;
-          break;
+          data.address = addr; break;
         }
       }
     }
 
-    // ---- 6. 이메일 ----
+    // 6. 이메일
     const emailLine = findLine('이메일');
     m = emailLine.match(/이메일주소?\s+(\S+@\S+)/);
     if (!m) m = text.match(/([\w.\-]+@[\w.\-]+\.\w+)/);
     data.email = m ? m[1] : '';
 
-    // ---- 7. 운영시간 ----
-    const timeLine = findLine('운영시간');
-    m = timeLine.match(/운영시간\s+(\S+)/);
+    // 7. 운영시간
+    m = findLine('운영시간').match(/운영시간\s+(\S+)/);
     data.operatingHours = m ? m[1] : '';
 
-    // ---- 8. 은행명 ----
-    const bankLine = findLine('은행명');
-    m = bankLine.match(/은행명\s+(\S+)/);
+    // 8. 은행명
+    m = findLine('은행명').match(/은행명\s+(\S+)/);
     data.bankName = m ? m[1] : '';
 
-    // ---- 9. 계좌번호 ----
-    const acctLine = findLine('계좌번호');
-    m = acctLine.match(/계좌번호\s+([\d\-]+)/);
+    // 9. 계좌번호
+    m = findLine('계좌번호').match(/계좌번호\s+([\d\-]+)/);
     data.accountNumber = m ? m[1] : '';
 
-    // ---- 10. 명의주 ----
-    const holderLine = findLine('명의주');
-    m = holderLine.match(/명의주\s+(\S+)/);
+    // 10. 명의주
+    m = findLine('명의주').match(/명의주\s+(\S+)/);
     data.accountHolder = m ? m[1] : '';
 
-    // ---- 11. 사업자번호 ----
-    const bizLine = findLine('사업자');
-    m = bizLine.match(/사업자\s*등록번호\s+([\d\-]+)/);
+    // 11. 사업자번호
+    m = findLine('사업자').match(/사업자\s*등록번호\s+([\d\-]+)/);
     data.businessNumber = m ? m[1].replace(/-/g, '') : '';
 
-    // 디버그: 빈 값 체크
     const fields = ['contractDate','storeName','representative','storePhone','mobilePhone','address','email','operatingHours','bankName','accountNumber','accountHolder','businessNumber'];
     const missing = fields.filter(f => !data[f]);
-    if (missing.length > 0) {
-      log(`  ⚠ 누락 필드: ${missing.join(', ')}`, 'error');
-    }
+    if (missing.length > 0) log(`  ⚠ 누락: ${missing.join(', ')}`, 'error');
 
     return data;
   }
@@ -584,141 +534,92 @@
   // ============================================================
   async function extractAll() {
     if (pdfFiles.length === 0) return;
-
-    const btnExtract = document.getElementById('btnExtract');
-    btnExtract.disabled = true;
-    btnExtract.innerHTML = '<span class="btn-icon">⏳</span> 처리 중...';
-
-    const progressBar = document.getElementById('progressBar');
-    const progressFill = document.getElementById('progressFill');
-    progressBar.classList.add('active');
-
+    const btn = document.getElementById('btnExtract');
+    btn.disabled = true; btn.innerHTML = '<span class="btn-icon">⏳</span> 처리 중...';
+    const pBar = document.getElementById('progressBar');
+    const pFill = document.getElementById('progressFill');
+    pBar.classList.add('active');
     extractedData = [];
     const total = pdfFiles.length;
     log(`추출 시작 - 총 ${total}개 파일`, 'info');
 
     for (let i = 0; i < total; i++) {
       const pf = pdfFiles[i];
-      pf.status = 'processing';
-      renderFileList();
-      progressFill.style.width = `${((i) / total) * 100}%`;
-
+      pf.status = 'processing'; renderFileList();
+      pFill.style.width = `${(i / total) * 100}%`;
       try {
-        log(`[${i + 1}/${total}] 처리 중: ${pf.name}`);
+        log(`[${i+1}/${total}] ${pf.name}`);
         const text = await extractTextFromPDF(pf.file);
-
-        // 디버그 영역에 raw text 저장
         document.getElementById('debugArea').textContent = `=== ${pf.name} ===\n${text}`;
-
         const data = parseContractData(text);
-
         if (data.storeName || data.businessNumber || data.storePhone) {
-          data._fileName = pf.name;
-          extractedData.push(data);
-          pf.status = 'done';
-          log(`  ✓ 추출 성공: ${data.storeName || '(상호 없음)'}`, 'success');
-        } else {
-          pf.status = 'error';
-          log(`  ✗ 데이터를 찾을 수 없음: ${pf.name}`, 'error');
-        }
-      } catch (err) {
-        pf.status = 'error';
-        log(`  ✗ 오류: ${pf.name} - ${err.message}`, 'error');
-      }
-
-      renderFileList();
-      progressFill.style.width = `${((i + 1) / total) * 100}%`;
+          data._fileName = pf.name; extractedData.push(data);
+          pf.status = 'done'; log(`  ✓ ${data.storeName || '(상호없음)'}`, 'success');
+        } else { pf.status = 'error'; log(`  ✗ 데이터 없음`, 'error'); }
+      } catch (err) { pf.status = 'error'; log(`  ✗ 오류: ${err.message}`, 'error'); }
+      renderFileList(); pFill.style.width = `${((i+1)/total)*100}%`;
     }
 
     renderResultTable(); updateStats();
-
-    const successCount = extractedData.length;
-    log(`추출 완료! 성공: ${successCount}개, 실패: ${total - successCount}개`, successCount > 0 ? 'success' : 'error');
-
-    btnExtract.disabled = false;
-    btnExtract.innerHTML = '<span class="btn-icon">⚡</span> 전체 추출';
+    log(`완료! 성공: ${extractedData.length}/${total}`, extractedData.length > 0 ? 'success' : 'error');
+    btn.disabled = false; btn.innerHTML = '<span class="btn-icon">⚡</span> 전체 추출';
     document.getElementById('btnDownload').disabled = extractedData.length === 0;
-
-    setTimeout(() => { progressBar.classList.remove('active'); }, 1000);
+    setTimeout(() => pBar.classList.remove('active'), 1000);
   }
 
   // ============================================================
-  // 결과 테이블 렌더링
+  // 테이블
   // ============================================================
   function renderResultTable() {
     const wrap = document.getElementById('tableWrap');
-    const badge = document.getElementById('resultBadge');
+    document.getElementById('resultBadge').textContent = extractedData.length;
     const btnCopy = document.getElementById('btnCopy');
-    badge.textContent = extractedData.length;
-
     if (extractedData.length === 0) {
       wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div>추출 결과가 여기에 표시됩니다</div>';
-      btnCopy.style.display = 'none';
-      return;
+      btnCopy.style.display = 'none'; return;
     }
     btnCopy.style.display = '';
-
     const headers = ['#','체결일','상호','대표자','매장전화','휴대전화','주소','이메일','운영시간','은행명','계좌번호','명의주','사업자번호'];
     const keys = ['contractDate','storeName','representative','storePhone','mobilePhone','address','email','operatingHours','bankName','accountNumber','accountHolder','businessNumber'];
-
-    let html = '<table><thead><tr>';
-    headers.forEach(h => { html += `<th>${h}</th>`; });
-    html += '</tr></thead><tbody>';
+    let html = '<table><thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
     extractedData.forEach((d, i) => {
-      html += '<tr>';
-      html += `<td class="row-num">${i + 1}</td>`;
-      keys.forEach(k => {
-        const cls = k === 'address' ? ' class="address"' : '';
-        html += `<td${cls} title="${(d[k]||'').replace(/"/g,'&quot;')}">${d[k] || '-'}</td>`;
-      });
-      html += '</tr>';
+      html += '<tr>' + `<td class="row-num">${i+1}</td>` +
+        keys.map(k => `<td${k==='address'?' class="address"':''} title="${(d[k]||'').replace(/"/g,'&quot;')}">${d[k]||'-'}</td>`).join('') + '</tr>';
     });
-    html += '</tbody></table>';
-    wrap.innerHTML = html;
+    wrap.innerHTML = html + '</tbody></table>';
   }
 
   // ============================================================
-  // 엑셀 다운로드
+  // 엑셀 / 클립보드
   // ============================================================
   function downloadExcel() {
-    if (extractedData.length === 0) return;
+    if (!extractedData.length) return;
     const headers = ['체결일','상호','대표자','매장전화번호','휴대전화번호','주소','이메일','운영시간','은행명','계좌번호','명의주','사업자번호'];
     const keys = ['contractDate','storeName','representative','storePhone','mobilePhone','address','email','operatingHours','bankName','accountNumber','accountHolder','businessNumber'];
-    const wsData = [headers];
-    extractedData.forEach(d => { wsData.push(keys.map(k => d[k] || '')); });
-
+    const wsData = [headers, ...extractedData.map(d => keys.map(k => d[k]||''))];
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.aoa_to_sheet(wsData);
-    ws['!cols'] = [{ wch:12 },{ wch:15 },{ wch:8 },{ wch:14 },{ wch:14 },{ wch:35 },{ wch:25 },{ wch:14 },{ wch:12 },{ wch:18 },{ wch:8 },{ wch:14 }];
+    ws['!cols'] = [{wch:12},{wch:15},{wch:8},{wch:14},{wch:14},{wch:35},{wch:25},{wch:14},{wch:12},{wch:18},{wch:8},{wch:14}];
     XLSX.utils.book_append_sheet(wb, ws, '제휴점 계약 데이터');
-
-    const now = new Date();
-    const ds = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
-    XLSX.writeFile(wb, `제휴점_계약추출_${ds}.xlsx`);
-    log('엑셀 파일 다운로드 완료', 'success');
+    const d = new Date();
+    XLSX.writeFile(wb, `제휴점_계약추출_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.xlsx`);
+    log('엑셀 다운로드 완료', 'success');
   }
 
-  // ============================================================
-  // 클립보드 복사
-  // ============================================================
   function copyToClipboard() {
-    if (extractedData.length === 0) return;
+    if (!extractedData.length) return;
     const headers = ['체결일','상호','대표자','매장전화번호','휴대전화번호','주소','이메일','운영시간','은행명','계좌번호','명의주','사업자번호'];
     const keys = ['contractDate','storeName','representative','storePhone','mobilePhone','address','email','operatingHours','bankName','accountNumber','accountHolder','businessNumber'];
     let tsv = headers.join('\t') + '\n';
-    extractedData.forEach(d => { tsv += keys.map(k => d[k] || '').join('\t') + '\n'; });
+    extractedData.forEach(d => { tsv += keys.map(k => d[k]||'').join('\t') + '\n'; });
     navigator.clipboard.writeText(tsv).then(() => {
-      log('클립보드에 복사 완료 (탭 구분)', 'success');
+      log('클립보드 복사 완료 (탭 구분)', 'success');
       const btn = document.getElementById('btnCopy');
-      const orig = btn.innerHTML;
-      btn.innerHTML = '<span class="btn-icon">✅</span> 복사됨!';
-      setTimeout(() => { btn.innerHTML = orig; }, 1500);
+      const o = btn.innerHTML; btn.innerHTML = '<span class="btn-icon">✅</span> 복사됨!';
+      setTimeout(() => btn.innerHTML = o, 1500);
     });
   }
 
-  // ============================================================
-  // 유틸
-  // ============================================================
   function clearAll() {
     pdfFiles = []; extractedData = [];
     renderFileList(); renderResultTable(); updateStats();
@@ -731,20 +632,15 @@
   function log(msg, type = '') {
     const area = document.getElementById('logArea');
     const now = new Date();
-    const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+    const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
     const line = document.createElement('div');
     line.className = `log-line ${type}`;
-    line.innerHTML = `<span class="log-time">[${time}]</span>${msg}`;
+    line.innerHTML = `<span class="log-time">[${t}]</span>${msg}`;
     area.insertBefore(line, area.firstChild);
     while (area.children.length > 100) area.removeChild(area.lastChild);
   }
-
   function clearLog() { document.getElementById('logArea').innerHTML = ''; }
-
-  function toggleDebug() {
-    const el = document.getElementById('debugArea');
-    el.classList.toggle('visible');
-  }
+  function toggleDebug() { document.getElementById('debugArea').classList.toggle('visible'); }
 
   log('PDF 제휴점 계약서 추출기 준비 완료', 'info');
 </script>
