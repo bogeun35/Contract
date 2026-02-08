@@ -8,232 +8,90 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
-    --bg: #f5f6fa;
-    --surface: #ffffff;
-    --surface-hover: #f8f9fc;
-    --border: #e2e5ed;
-    --border-active: #3b6cf7;
-    --text: #1e2634;
-    --text-dim: #5a6474;
-    --text-muted: #98a1b0;
-    --accent: #3b6cf7;
-    --accent-light: #eef2ff;
-    --accent-hover: #2c59e0;
-    --success: #0ea55a;
-    --success-bg: #edfaf3;
-    --warning: #e5960b;
-    --warning-bg: #fef8ec;
-    --danger: #e5453d;
-    --danger-bg: #fef0ef;
-    --radius: 8px;
-    --radius-sm: 6px;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-    --shadow: 0 2px 8px rgba(0,0,0,0.08);
+    --bg: #f5f6fa; --surface: #ffffff; --surface-hover: #f8f9fc;
+    --border: #e2e5ed; --text: #1e2634; --text-dim: #5a6474; --text-muted: #98a1b0;
+    --accent: #3b6cf7; --accent-light: #eef2ff; --accent-hover: #2c59e0;
+    --success: #0ea55a; --success-bg: #edfaf3;
+    --warning: #e5960b; --warning-bg: #fef8ec;
+    --danger: #e5453d; --danger-bg: #fef0ef;
+    --radius: 8px; --radius-sm: 6px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06); --shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
-
-  body {
-    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    line-height: 1.5;
-  }
-
-  /* Header */
-  .header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: var(--shadow-sm);
-  }
+  body { font-family: 'Noto Sans KR', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.5; }
+  .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); }
   .header-left { display: flex; align-items: center; gap: 12px; }
-  .header-icon {
-    width: 34px; height: 34px;
-    background: var(--accent);
-    border-radius: var(--radius-sm);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-    color: #fff;
-  }
-  .header h1 { font-size: 16px; font-weight: 600; color: var(--text); }
+  .header-icon { width: 34px; height: 34px; background: var(--accent); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 16px; color: #fff; }
+  .header h1 { font-size: 16px; font-weight: 600; }
   .header h1 span { color: var(--text-muted); font-weight: 400; font-size: 12.5px; margin-left: 10px; }
   .header-actions { display: flex; gap: 8px; }
-
-  /* Buttons */
-  .btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 16px;
-    border: 1px solid var(--border); border-radius: var(--radius-sm);
-    background: var(--surface); color: var(--text);
-    font-family: inherit; font-size: 13px; font-weight: 500;
-    cursor: pointer; transition: all 0.15s ease; white-space: nowrap;
-  }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
   .btn:hover { background: var(--surface-hover); border-color: #ccd1dc; }
   .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
-  .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; background: var(--accent); }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-primary:disabled, .btn-success:disabled { opacity: 0.45; cursor: not-allowed; }
   .btn-success { background: var(--success); border-color: var(--success); color: #fff; font-weight: 600; }
   .btn-success:hover { background: #0c9450; }
-  .btn-success:disabled { opacity: 0.45; cursor: not-allowed; }
   .btn-icon { font-size: 14px; line-height: 1; }
-
-  /* Main */
-  .main {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 24px 32px;
-    display: flex; flex-direction: column; gap: 18px;
-  }
-
-  /* Drop Zone */
-  .drop-zone {
-    border: 2px dashed var(--border);
-    border-radius: var(--radius);
-    padding: 44px 24px;
-    text-align: center;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    position: relative;
-    background: var(--surface);
-  }
-  .drop-zone:hover { border-color: var(--accent); background: var(--accent-light); }
-  .drop-zone.drag-over { border-color: var(--accent); background: var(--accent-light); transform: scale(1.003); }
+  .main { max-width: 1400px; margin: 0 auto; padding: 24px 32px; display: flex; flex-direction: column; gap: 18px; }
+  .drop-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 44px 24px; text-align: center; transition: all 0.2s; cursor: pointer; position: relative; background: var(--surface); }
+  .drop-zone:hover, .drop-zone.drag-over { border-color: var(--accent); background: var(--accent-light); }
   .drop-icon { font-size: 36px; margin-bottom: 10px; }
-  .drop-text { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .drop-text { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
   .drop-hint { font-size: 12px; color: var(--text-muted); }
   .drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-
-  /* Stats */
   .stats-bar { display: flex; gap: 12px; flex-wrap: wrap; }
-  .stat-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 14px 20px;
-    flex: 1; min-width: 140px;
-    display: flex; align-items: center; gap: 12px;
-    box-shadow: var(--shadow-sm);
-  }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 20px; flex: 1; min-width: 140px; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow-sm); }
   .stat-icon { font-size: 20px; }
-  .stat-info { display: flex; flex-direction: column; }
-  .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.3px; }
-  .stat-value { font-size: 22px; font-weight: 700; color: var(--text); }
+  .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+  .stat-value { font-size: 22px; font-weight: 700; }
   .stat-value.success { color: var(--success); }
   .stat-value.warning { color: var(--warning); }
-
-  /* Section */
-  .section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-  }
-  .section-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 18px;
-    border-bottom: 1px solid var(--border);
-    background: #fafbfd;
-  }
-  .section-title { font-size: 13px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
-  .section-badge {
-    background: var(--accent-light); color: var(--accent);
-    font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
-  }
-
-  /* File list */
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); }
+  .section-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid var(--border); background: #fafbfd; }
+  .section-title { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .section-badge { background: var(--accent-light); color: var(--accent); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
   .file-list { max-height: 200px; overflow-y: auto; }
-  .file-item {
-    display: flex; align-items: center; padding: 10px 18px;
-    border-bottom: 1px solid #f0f1f5; gap: 12px; transition: background 0.1s;
-  }
+  .file-item { display: flex; align-items: center; padding: 10px 18px; border-bottom: 1px solid #f0f1f5; gap: 12px; transition: background 0.1s; }
   .file-item:last-child { border-bottom: none; }
   .file-item:hover { background: #f8f9fc; }
   .file-num { font-size: 11px; color: var(--text-muted); min-width: 22px; text-align: center; }
-  .file-icon { font-size: 15px; }
-  .file-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-name { flex: 1; font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .file-size { font-size: 11px; color: var(--text-muted); }
   .file-status { font-size: 11.5px; padding: 2px 10px; border-radius: 10px; font-weight: 500; }
   .file-status.pending { background: #f0f1f5; color: var(--text-muted); }
   .file-status.processing { background: var(--warning-bg); color: var(--warning); }
   .file-status.done { background: var(--success-bg); color: var(--success); }
   .file-status.error { background: var(--danger-bg); color: var(--danger); }
-  .file-remove {
-    background: none; border: none; color: var(--text-muted);
-    cursor: pointer; font-size: 15px; padding: 2px 6px;
-    border-radius: 4px; transition: all 0.1s;
-  }
+  .file-remove { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 15px; padding: 2px 6px; border-radius: 4px; }
   .file-remove:hover { background: var(--danger-bg); color: var(--danger); }
-
-  /* Results table */
   .table-wrap { overflow-x: auto; overflow-y: auto; max-height: 420px; }
   .table-wrap table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 1100px; }
   .table-wrap thead { position: sticky; top: 0; z-index: 2; }
-  .table-wrap th {
-    background: #f5f6fa; color: var(--text-dim);
-    font-weight: 600; font-size: 11px;
-    letter-spacing: 0.3px; padding: 10px 12px; text-align: left;
-    white-space: nowrap; border-bottom: 2px solid var(--border);
-  }
-  .table-wrap td {
-    padding: 9px 12px; border-bottom: 1px solid #f0f1f5;
-    white-space: nowrap; max-width: 200px; overflow: hidden; text-overflow: ellipsis;
-    color: var(--text);
-  }
+  .table-wrap th { background: #f5f6fa; color: var(--text-dim); font-weight: 600; font-size: 11px; padding: 10px 12px; text-align: left; white-space: nowrap; border-bottom: 2px solid var(--border); }
+  .table-wrap td { padding: 9px 12px; border-bottom: 1px solid #f0f1f5; white-space: nowrap; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
   .table-wrap tr:hover td { background: #f8f9fc; }
   .table-wrap td.address { max-width: 280px; }
-  .table-wrap .row-num { color: var(--text-muted); font-size: 11px; text-align: center; min-width: 30px; }
+  .table-wrap .row-num { color: var(--text-muted); font-size: 11px; text-align: center; }
   .empty-state { padding: 50px 20px; text-align: center; color: var(--text-muted); font-size: 13px; }
   .empty-state .empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
-
-  /* Progress */
   .progress-bar { height: 3px; background: #eceef3; border-radius: 2px; overflow: hidden; display: none; }
   .progress-bar.active { display: block; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #6e8efb); border-radius: 2px; transition: width 0.3s ease; width: 0%; }
-
-  /* Log */
-  .log-area {
-    font-family: 'Consolas', 'SF Mono', 'Courier New', monospace;
-    font-size: 11.5px; padding: 12px 16px;
-    max-height: 120px; overflow-y: auto; line-height: 1.65; color: var(--text-dim);
-    background: #fafbfd;
-  }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #6e8efb); border-radius: 2px; transition: width 0.3s; width: 0%; }
+  .log-area { font-family: 'Consolas', monospace; font-size: 11.5px; padding: 12px 16px; max-height: 140px; overflow-y: auto; line-height: 1.65; color: var(--text-dim); background: #fafbfd; }
   .log-line.success { color: var(--success); }
   .log-line.error { color: var(--danger); }
   .log-line.info { color: var(--accent); }
   .log-time { color: var(--text-muted); margin-right: 6px; }
-
-  .debug-toggle { font-size: 11px; padding: 4px 10px; }
-  .debug-area {
-    display: none; padding: 12px 16px; max-height: 200px; overflow-y: auto;
-    font-family: 'Consolas', monospace; font-size: 11px; line-height: 1.5;
-    color: var(--text-dim); white-space: pre-wrap; word-break: break-all;
-    background: #f5f6fa; border-bottom: 1px solid var(--border);
-  }
+  .debug-area { display: none; padding: 12px 16px; max-height: 250px; overflow-y: auto; font-family: 'Consolas', monospace; font-size: 11px; line-height: 1.5; color: var(--text-dim); white-space: pre-wrap; word-break: break-all; background: #f5f6fa; border-bottom: 1px solid var(--border); }
   .debug-area.visible { display: block; }
-
   ::-webkit-scrollbar { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: #d4d7e0; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #b8bcc8; }
-
-  @media (max-width: 768px) {
-    .header { padding: 12px 16px; }
-    .main { padding: 16px; }
-    .header h1 span { display: none; }
-  }
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="header-left">
     <div class="header-icon">📄</div>
@@ -245,7 +103,6 @@
     <button class="btn btn-success" id="btnDownload" onclick="downloadExcel()" disabled><span class="btn-icon">📥</span> 엑셀 다운로드</button>
   </div>
 </div>
-
 <div class="main">
   <div class="drop-zone" id="dropZone">
     <div class="drop-icon">📁</div>
@@ -253,50 +110,29 @@
     <div class="drop-hint">여러 파일 동시 선택 가능 · 제휴점 서비스공급 계약서 PDF</div>
     <input type="file" id="fileInput" accept=".pdf" multiple>
   </div>
-
   <div class="stats-bar">
-    <div class="stat-card">
-      <div class="stat-icon">📄</div>
-      <div class="stat-info"><div class="stat-label">등록 파일</div><div class="stat-value" id="statTotal">0</div></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">✅</div>
-      <div class="stat-info"><div class="stat-label">추출 성공</div><div class="stat-value success" id="statSuccess">0</div></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">⚠️</div>
-      <div class="stat-info"><div class="stat-label">실패</div><div class="stat-value warning" id="statFail">0</div></div>
-    </div>
+    <div class="stat-card"><div class="stat-icon">📄</div><div class="stat-info"><div class="stat-label">등록 파일</div><div class="stat-value" id="statTotal">0</div></div></div>
+    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-info"><div class="stat-label">추출 성공</div><div class="stat-value success" id="statSuccess">0</div></div></div>
+    <div class="stat-card"><div class="stat-icon">⚠️</div><div class="stat-info"><div class="stat-label">실패</div><div class="stat-value warning" id="statFail">0</div></div></div>
   </div>
-
   <div class="section">
-    <div class="section-header">
-      <div class="section-title">📋 파일 목록 <span class="section-badge" id="fileBadge">0</span></div>
-    </div>
+    <div class="section-header"><div class="section-title">📋 파일 목록 <span class="section-badge" id="fileBadge">0</span></div></div>
     <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="file-list" id="fileList">
-      <div class="empty-state"><div class="empty-icon">📂</div>PDF 파일을 추가하면 여기에 표시됩니다</div>
-    </div>
+    <div class="file-list" id="fileList"><div class="empty-state"><div class="empty-icon">📂</div>PDF 파일을 추가하면 여기에 표시됩니다</div></div>
   </div>
-
   <div class="section">
     <div class="section-header">
       <div class="section-title">📊 추출 결과 <span class="section-badge" id="resultBadge">0</span></div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn" onclick="copyToClipboard()" id="btnCopy" style="display:none"><span class="btn-icon">📋</span> 클립보드 복사</button>
-      </div>
+      <div style="display:flex;gap:8px;"><button class="btn" onclick="copyToClipboard()" id="btnCopy" style="display:none"><span class="btn-icon">📋</span> 클립보드 복사</button></div>
     </div>
-    <div class="table-wrap" id="tableWrap">
-      <div class="empty-state" id="emptyResult"><div class="empty-icon">📊</div>추출 결과가 여기에 표시됩니다</div>
-    </div>
+    <div class="table-wrap" id="tableWrap"><div class="empty-state"><div class="empty-icon">📊</div>추출 결과가 여기에 표시됩니다</div></div>
   </div>
-
   <div class="section">
     <div class="section-header">
       <div class="section-title">📝 로그</div>
       <div style="display:flex;gap:8px;">
-        <button class="btn debug-toggle" onclick="toggleDebug()">Raw 텍스트</button>
-        <button class="btn" onclick="clearLog()" style="font-size:11px; padding: 4px 10px;">지우기</button>
+        <button class="btn" onclick="toggleDebug()" style="font-size:11px;padding:4px 10px">Raw 텍스트</button>
+        <button class="btn" onclick="clearLog()" style="font-size:11px;padding:4px 10px">지우기</button>
       </div>
     </div>
     <div class="debug-area" id="debugArea"></div>
@@ -305,381 +141,389 @@
 </div>
 
 <script>
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  let pdfFiles = [];
-  let extractedData = [];
-  let lastRawText = '';
+let pdfFiles = [], extractedData = [], lastRawText = '';
 
-  const dropZone = document.getElementById('dropZone');
-  const fileInput = document.getElementById('fileInput');
+// ============================================================
+// 파일 관리 (드래그앤드롭, 선택, 삭제)
+// ============================================================
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+fileInput.addEventListener('change', e => { addFiles(e.target.files); fileInput.value = ''; });
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  addFiles([...e.dataTransfer.files].filter(f => f.name.toLowerCase().endsWith('.pdf')));
+});
 
-  fileInput.addEventListener('change', (e) => { addFiles(e.target.files); fileInput.value = ''; });
-  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-  dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('drag-over'); });
-  dropZone.addEventListener('drop', (e) => {
-    e.preventDefault(); dropZone.classList.remove('drag-over');
-    addFiles([...e.dataTransfer.files].filter(f => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')));
+function addFiles(files) {
+  for (const file of files) {
+    if (pdfFiles.some(f => f.name === file.name && f.size === file.size)) continue;
+    pdfFiles.push({ file, name: file.name, size: file.size, status: 'pending' });
+  }
+  renderFileList(); updateStats();
+  document.getElementById('btnExtract').disabled = pdfFiles.length === 0;
+  log(`${files.length}개 파일 추가 (총 ${pdfFiles.length}개)`, 'info');
+}
+function removeFile(i) { pdfFiles.splice(i, 1); renderFileList(); updateStats(); document.getElementById('btnExtract').disabled = !pdfFiles.length; }
+function formatSize(b) { return b < 1024 ? b+' B' : b < 1048576 ? (b/1024).toFixed(1)+' KB' : (b/1048576).toFixed(1)+' MB'; }
+function renderFileList() {
+  const el = document.getElementById('fileList');
+  document.getElementById('fileBadge').textContent = pdfFiles.length;
+  if (!pdfFiles.length) { el.innerHTML = '<div class="empty-state"><div class="empty-icon">📂</div>PDF 파일을 추가하면 여기에 표시됩니다</div>'; return; }
+  el.innerHTML = pdfFiles.map((f,i) => `<div class="file-item"><span class="file-num">${i+1}</span><span class="file-icon">📄</span><span class="file-name" title="${f.name}">${f.name}</span><span class="file-size">${formatSize(f.size)}</span><span class="file-status ${f.status}">${{pending:'대기',processing:'처리중...',done:'완료 ✓',error:'실패 ✗'}[f.status]}</span><button class="file-remove" onclick="removeFile(${i})">✕</button></div>`).join('');
+}
+function updateStats() {
+  document.getElementById('statTotal').textContent = pdfFiles.length;
+  document.getElementById('statSuccess').textContent = extractedData.length;
+  document.getElementById('statFail').textContent = pdfFiles.filter(f => f.status === 'error').length;
+}
+
+// ============================================================
+// 핵심: PDF에서 데이터 추출
+//
+// 전략:
+// 1) PDF.js로 모든 텍스트 아이템(x, y, text) 수집
+// 2) Y좌표로 줄 그룹핑 (±3 허용)
+// 3) 각 줄 내 X좌표 순 정렬 → 간격 기반 단어 합치기
+// 4) "계약체결일" 라벨의 Y좌표를 기준점으로 잡고
+//    상대 Y오프셋으로 각 필드의 줄을 찾기
+// 5) 각 줄에서 라벨 텍스트 제거 → 나머지가 값
+// ============================================================
+async function extractDataFromPDF(file) {
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+
+  // 계약정보 페이지 찾기
+  let targetPage = null;
+  for (let p = pdf.numPages; p >= 1; p--) {
+    const pg = await pdf.getPage(p);
+    const ct = await pg.getTextContent();
+    const raw = ct.items.map(i => i.str).join('');
+    if (raw.includes('계약체결일') && raw.includes('은행명')) { targetPage = pg; break; }
+  }
+  if (!targetPage) targetPage = await pdf.getPage(pdf.numPages);
+
+  const content = await targetPage.getTextContent();
+  const items = content.items.filter(i => i.str.trim());
+
+  // Step 1: 아이템 수집
+  const all = items.map(i => ({
+    x: Math.round(i.transform[4]),
+    y: Math.round(i.transform[5]),
+    w: i.width || 0,
+    text: i.str
+  }));
+
+  // Step 2: Y좌표 그룹핑 (±3 = 같은 줄)
+  all.sort((a, b) => b.y - a.y || a.x - b.x); // Y 내림차순(위→아래)
+
+  const lines = [];
+  if (all.length === 0) return null;
+
+  let curLine = [all[0]], curY = all[0].y;
+  for (let i = 1; i < all.length; i++) {
+    if (Math.abs(all[i].y - curY) <= 3) {
+      curLine.push(all[i]);
+    } else {
+      lines.push(curLine);
+      curLine = [all[i]];
+      curY = all[i].y;
+    }
+  }
+  lines.push(curLine);
+
+  // Step 3: 각 줄의 텍스트 합치기 (X순, 간격 기반 공백)
+  const mergedLines = lines.map(line => {
+    line.sort((a, b) => a.x - b.x);
+    let text = '';
+    for (let i = 0; i < line.length; i++) {
+      if (i === 0) { text = line[i].text; continue; }
+      const prev = line[i - 1];
+      const gap = line[i].x - (prev.x + prev.w);
+      // 간격 > 5px → 공백, > 30px → 탭(구분자)
+      if (gap > 30) text += '\t' + line[i].text;
+      else if (gap > 5) text += ' ' + line[i].text;
+      else text += line[i].text;
+    }
+    return { y: line[0].y, text: text.trim() };
   });
 
-  function addFiles(files) {
-    for (const file of files) {
-      if (pdfFiles.some(f => f.name === file.name && f.size === file.size)) continue;
-      pdfFiles.push({ file, name: file.name, size: file.size, status: 'pending' });
-    }
-    renderFileList(); updateStats();
-    document.getElementById('btnExtract').disabled = pdfFiles.length === 0;
-    log(`${files.length}개 파일 추가됨 (총 ${pdfFiles.length}개)`, 'info');
-  }
+  // 디버그
+  lastRawText = mergedLines.map(l => `y=${l.y} | ${l.text}`).join('\n');
 
-  function removeFile(idx) {
-    pdfFiles.splice(idx, 1); renderFileList(); updateStats();
-    document.getElementById('btnExtract').disabled = pdfFiles.length === 0;
-  }
+  // Step 4: "계약체결일" 기준점 찾기
+  const dateLineIdx = mergedLines.findIndex(l => l.text.includes('계약체결일'));
+  if (dateLineIdx < 0) return null;
+  const baseY = mergedLines[dateLineIdx].y;
 
-  function formatSize(bytes) {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / 1048576).toFixed(1) + ' MB';
-  }
-
-  function renderFileList() {
-    const list = document.getElementById('fileList');
-    document.getElementById('fileBadge').textContent = pdfFiles.length;
-    if (pdfFiles.length === 0) {
-      list.innerHTML = '<div class="empty-state"><div class="empty-icon">📂</div>PDF 파일을 추가하면 여기에 표시됩니다</div>';
-      return;
-    }
-    list.innerHTML = pdfFiles.map((f, i) => `
-      <div class="file-item">
-        <span class="file-num">${i + 1}</span>
-        <span class="file-icon">📄</span>
-        <span class="file-name" title="${f.name}">${f.name}</span>
-        <span class="file-size">${formatSize(f.size)}</span>
-        <span class="file-status ${f.status}">${
-          f.status === 'pending' ? '대기' : f.status === 'processing' ? '처리중...' :
-          f.status === 'done' ? '완료 ✓' : '실패 ✗'
-        }</span>
-        <button class="file-remove" onclick="removeFile(${i})" title="제거">✕</button>
-      </div>
-    `).join('');
-  }
-
-  function updateStats() {
-    document.getElementById('statTotal').textContent = pdfFiles.length;
-    document.getElementById('statSuccess').textContent = extractedData.length;
-    document.getElementById('statFail').textContent = pdfFiles.filter(f => f.status === 'error').length;
-  }
-
-  // ============================================================
-  // PDF 데이터 추출 (PDF.js) - 좌표 기반 직접 필드 추출
-  //
-  // 계약서 양식의 값 필드가 고정 좌표에 위치하는 점을 활용:
-  //   - 제휴점 값: x ≈ 199~200
-  //   - 대표자/휴대전화: x ≈ 371
-  //   - 월/일: x ≈ 213, 243
-  //   - 각 필드는 고유한 Y좌표를 가짐
-  // ============================================================
-  async function extractDataFromPDF(file) {
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-    const numPages = pdf.numPages;
-
-    // "계약체결일"과 "은행명"이 모두 있는 페이지 찾기
-    let targetPage = null;
-    for (let p = numPages; p >= 1; p--) {
-      const page = await pdf.getPage(p);
-      const content = await page.getTextContent();
-      const rawText = content.items.map(it => it.str).join('');
-      if (rawText.includes('계약체결일') && rawText.includes('은행명')) {
-        targetPage = page;
-        break;
-      }
-    }
-    if (!targetPage) targetPage = await pdf.getPage(numPages);
-
-    const content = await targetPage.getTextContent();
-    const items = content.items;
-    if (items.length === 0) return null;
-
-    // 모든 텍스트 아이템을 {x, y, text}로 수집
-    const allItems = [];
-    for (const item of items) {
-      const text = item.str.trim();
-      if (!text) continue;
-      allItems.push({
-        x: Math.round(item.transform[4]),
-        y: Math.round(item.transform[5]),
-        text: text
-      });
-    }
-
-    // 디버그용 raw 데이터 생성
-    const debugLines = allItems
-      .sort((a, b) => b.y - a.y || a.x - b.x)
-      .map(it => `x=${it.x} y=${it.y} | [${it.text}]`);
-    lastRawText = debugLines.join('\n');
-
-    // ---- 좌표 기반 필드 추출 ----
-    // 헬퍼: 특정 좌표 범위의 아이템 찾기
-    function findItem(xMin, xMax, yMin, yMax) {
-      const found = allItems.filter(it =>
-        it.x >= xMin && it.x <= xMax && it.y >= yMin && it.y <= yMax
-      );
-      // Y좌표 우선, 같으면 X좌표 순
-      found.sort((a, b) => b.y - a.y || a.x - b.x);
-      return found.length > 0 ? found[0].text : '';
-    }
-
-    // 헬퍼: 특정 좌표 범위의 모든 아이템 텍스트 합치기
-    function findItemsJoined(xMin, xMax, yMin, yMax) {
-      const found = allItems.filter(it =>
-        it.x >= xMin && it.x <= xMax && it.y >= yMin && it.y <= yMax
-      );
-      found.sort((a, b) => a.x - b.x);
-      return found.map(it => it.text).join(' ').trim();
-    }
-
-    // ---- 먼저 "계약체결일" 라벨의 Y좌표를 기준점으로 잡기 ----
-    const dateLabelItem = allItems.find(it => it.text.includes('계약체결일'));
-    if (!dateLabelItem) return null;
-    const baseY = dateLabelItem.y; // 기준 Y (약 65)
-
-    // 상호 라벨 Y 찾기
-    const storeLabelItem = allItems.find(it => it.text.includes('상') && it.text.includes('호') && it.y > baseY - 30 && it.y < baseY + 30);
-    const storeLabelY = storeLabelItem ? storeLabelItem.y : baseY + 18;
-
-    // 각 필드의 예상 Y 오프셋 (baseY 기준 상대 좌표)
-    // 실제 좌표를 기반으로 동적 매핑
-    const fieldMap = {};
-
-    // 값 컬럼 X범위: 195~210 (제휴점 값), 365~380 (대표자/휴대전화)
-    const VAL_X_MIN = 190;
-    const VAL_X_MAX = 380;
-    const VAL_X_LEFT_MIN = 190;
-    const VAL_X_LEFT_MAX = 260;
-    const VAL_X_RIGHT_MIN = 360;
-    const VAL_X_RIGHT_MAX = 420;
-
-    // 라벨들의 Y좌표 찾아서 필드 위치 동적 결정
-    const labels = {};
-    const labelKeywords = [
-      { key: 'storeName', text: '상', partial: true },
-      { key: 'storePhone', text: '매장전화번호' },
-      { key: 'address', text: '주', partial: true, filter: (it) => it.x >= 140 && it.x <= 160 && it.y > baseY + 40 && it.y < baseY + 70 },
-      { key: 'email', text: '이메일' },
-      { key: 'operatingHours', text: '운영시간' },
-      { key: 'bankName', text: '은행명' },
-      { key: 'accountNumber', text: '계좌번호' },
-      { key: 'accountHolder', text: '명의주' },
-      { key: 'businessNumber', text: '사업자' },
-    ];
-
-    // 값 컬럼(x≈199~200)에 있는 아이템들을 Y순으로 정렬
-    const valueItems = allItems
-      .filter(it => it.x >= 195 && it.x <= 210 && it.y > baseY)
-      .sort((a, b) => a.y - b.y);
-
-    // 대표자/휴대전화 컬럼(x≈371)
-    const rightItems = allItems
-      .filter(it => it.x >= 360 && it.x <= 420 && it.y > baseY && it.y < baseY + 60)
-      .sort((a, b) => a.y - b.y);
-
-    // ---- 계약서 양식의 고정 순서를 활용 ----
-    // 값 컬럼의 Y좌표 순서:
-    // 1. 상호 (y≈80)
-    // 2. 매장전화 (y≈100)
-    // 3. 주소 (y≈117)
-    // 4. 이메일 (y≈136)
-    // 5. 운영시간 (y≈156)
-    // ... (운영회사 정보 건너뜀) ...
-    // 6. 은행명 (y≈241)
-    // 7. 계좌번호 (y≈257)
-    // 8. 명의주 (y≈272)
-    // 9. 사업자번호 (y≈288)
-
-    const data = {};
-
-    // 값 아이템을 순서대로 할당
-    // 제휴점 영역 (baseY ~ baseY+110): 상호, 매장전화, 주소, 이메일, 운영시간
-    const partnerVals = valueItems.filter(it => it.y >= baseY + 10 && it.y <= baseY + 100);
-    // 은행 영역 (baseY+160 이상): 은행명, 계좌번호, 명의주, 사업자번호
-    const bankVals = valueItems.filter(it => it.y >= baseY + 160 && it.y <= baseY + 240);
-
-    // 제휴점 값 할당 (순서 고정: 상호, 매장전화, 주소, 이메일, 운영시간)
-    if (partnerVals.length >= 1) data.storeName = partnerVals[0].text;
-    if (partnerVals.length >= 2) data.storePhone = partnerVals[1].text;
-    if (partnerVals.length >= 3) data.address = partnerVals[2].text;
-    if (partnerVals.length >= 4) data.email = partnerVals[3].text;
-    if (partnerVals.length >= 5) data.operatingHours = partnerVals[4].text;
-
-    // 오른쪽 컬럼: 대표자(첫번째), 휴대전화(두번째)
-    if (rightItems.length >= 1) data.representative = rightItems[0].text;
-    if (rightItems.length >= 2) data.mobilePhone = rightItems[1].text;
-
-    // 은행 영역 할당 (순서 고정: 은행명, 계좌번호, 명의주, 사업자번호)
-    if (bankVals.length >= 1) data.bankName = bankVals[0].text;
-    if (bankVals.length >= 2) data.accountNumber = bankVals[1].text;
-    if (bankVals.length >= 3) data.accountHolder = bankVals[2].text;
-    if (bankVals.length >= 4) {
-      data.businessNumber = bankVals[3].text.replace(/-/g, '');
-    }
-
-    // 계약체결일: "2026 년 월 일" + 별도 위치의 월/일 숫자
-    const yearMatch = allItems.find(it => it.text.includes('2026') || it.text.includes('2025') || it.text.includes('2027'));
-    let year = '', month = '', day = '';
-    if (yearMatch) {
-      const ym = yearMatch.text.match(/(\d{4})/);
-      if (ym) year = ym[1];
-    }
-    // 월/일은 보통 x≈213, x≈243 위치에 단독 숫자로 존재
-    const dateNumbers = allItems
-      .filter(it => it.x >= 205 && it.x <= 250 && Math.abs(it.y - baseY) <= 5 && /^\d{1,2}$/.test(it.text))
-      .sort((a, b) => a.x - b.x);
-    if (dateNumbers.length >= 2) {
-      month = dateNumbers[0].text;
-      day = dateNumbers[1].text;
-    } else if (dateNumbers.length === 1) {
-      // 년월일이 한 텍스트에 있을 수 있음
-      month = dateNumbers[0].text;
-    }
-
-    if (year && month && day) {
-      data.contractDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-    } else if (year) {
-      // fallback: 텍스트에서 추출 시도
-      const allText = allItems.map(it => it.text).join(' ');
-      const dm = allText.match(/(\d{4})\s*년\s*(\d{1,2})\s*월?\s*(\d{1,2})/);
-      if (dm) {
-        data.contractDate = `${dm[1]}-${dm[2].padStart(2, '0')}-${dm[3].padStart(2, '0')}`;
-      } else {
-        data.contractDate = year;
-      }
-    } else {
-      data.contractDate = '';
-    }
-
-    // 누락 필드 검사
-    const fields = ['contractDate','storeName','representative','storePhone','mobilePhone','address','email','operatingHours','bankName','accountNumber','accountHolder','businessNumber'];
-    const missing = fields.filter(f => !data[f]);
-    if (missing.length > 0) log(`  ⚠ 누락: ${missing.join(', ')}`, 'error');
-
-    return data;
-  }
-
-  // ============================================================
-  // 전체 추출
-  // ============================================================
-  async function extractAll() {
-    if (pdfFiles.length === 0) return;
-    const btn = document.getElementById('btnExtract');
-    btn.disabled = true; btn.innerHTML = '<span class="btn-icon">⏳</span> 처리 중...';
-    const pBar = document.getElementById('progressBar');
-    const pFill = document.getElementById('progressFill');
-    pBar.classList.add('active');
-    extractedData = [];
-    const total = pdfFiles.length;
-    log(`추출 시작 - 총 ${total}개 파일`, 'info');
-
-    for (let i = 0; i < total; i++) {
-      const pf = pdfFiles[i];
-      pf.status = 'processing'; renderFileList();
-      pFill.style.width = `${(i / total) * 100}%`;
-      try {
-        log(`[${i+1}/${total}] ${pf.name}`);
-        const data = await extractDataFromPDF(pf.file);
-        document.getElementById('debugArea').textContent = `=== ${pf.name} ===\n${lastRawText}`;
-        if (data && (data.storeName || data.businessNumber || data.storePhone)) {
-          data._fileName = pf.name; extractedData.push(data);
-          pf.status = 'done'; log(`  ✓ ${data.storeName || '(상호없음)'}`, 'success');
-        } else { pf.status = 'error'; log(`  ✗ 데이터 없음`, 'error'); }
-      } catch (err) { pf.status = 'error'; log(`  ✗ 오류: ${err.message}`, 'error'); }
-      renderFileList(); pFill.style.width = `${((i+1)/total)*100}%`;
-    }
-
-    renderResultTable(); updateStats();
-    log(`완료! 성공: ${extractedData.length}/${total}`, extractedData.length > 0 ? 'success' : 'error');
-    btn.disabled = false; btn.innerHTML = '<span class="btn-icon">⚡</span> 전체 추출';
-    document.getElementById('btnDownload').disabled = extractedData.length === 0;
-    setTimeout(() => pBar.classList.remove('active'), 1000);
-  }
-
-  // ============================================================
-  // 테이블
-  // ============================================================
-  function renderResultTable() {
-    const wrap = document.getElementById('tableWrap');
-    document.getElementById('resultBadge').textContent = extractedData.length;
-    const btnCopy = document.getElementById('btnCopy');
-    if (extractedData.length === 0) {
-      wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div>추출 결과가 여기에 표시됩니다</div>';
-      btnCopy.style.display = 'none'; return;
-    }
-    btnCopy.style.display = '';
-    const headers = ['#','체결일','상호','대표자','매장전화','휴대전화','주소','이메일','운영시간','은행명','계좌번호','명의주','사업자번호'];
-    const keys = ['contractDate','storeName','representative','storePhone','mobilePhone','address','email','operatingHours','bankName','accountNumber','accountHolder','businessNumber'];
-    let html = '<table><thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
-    extractedData.forEach((d, i) => {
-      html += '<tr>' + `<td class="row-num">${i+1}</td>` +
-        keys.map(k => `<td${k==='address'?' class="address"':''} title="${(d[k]||'').replace(/"/g,'&quot;')}">${d[k]||'-'}</td>`).join('') + '</tr>';
-    });
-    wrap.innerHTML = html + '</tbody></table>';
-  }
-
-  // ============================================================
-  // 엑셀 / 클립보드
-  // ============================================================
-  function downloadExcel() {
-    if (!extractedData.length) return;
-    const headers = ['체결일','상호','대표자','매장전화번호','휴대전화번호','주소','이메일','운영시간','은행명','계좌번호','명의주','사업자번호'];
-    const keys = ['contractDate','storeName','representative','storePhone','mobilePhone','address','email','operatingHours','bankName','accountNumber','accountHolder','businessNumber'];
-    const wsData = [headers, ...extractedData.map(d => keys.map(k => d[k]||''))];
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.aoa_to_sheet(wsData);
-    ws['!cols'] = [{wch:12},{wch:15},{wch:8},{wch:14},{wch:14},{wch:35},{wch:25},{wch:14},{wch:12},{wch:18},{wch:8},{wch:14}];
-    XLSX.utils.book_append_sheet(wb, ws, '제휴점 계약 데이터');
-    const d = new Date();
-    XLSX.writeFile(wb, `제휴점_계약추출_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.xlsx`);
-    log('엑셀 다운로드 완료', 'success');
-  }
-
-  function copyToClipboard() {
-    if (!extractedData.length) return;
-    const headers = ['체결일','상호','대표자','매장전화번호','휴대전화번호','주소','이메일','운영시간','은행명','계좌번호','명의주','사업자번호'];
-    const keys = ['contractDate','storeName','representative','storePhone','mobilePhone','address','email','operatingHours','bankName','accountNumber','accountHolder','businessNumber'];
-    let tsv = headers.join('\t') + '\n';
-    extractedData.forEach(d => { tsv += keys.map(k => d[k]||'').join('\t') + '\n'; });
-    navigator.clipboard.writeText(tsv).then(() => {
-      log('클립보드 복사 완료 (탭 구분)', 'success');
-      const btn = document.getElementById('btnCopy');
-      const o = btn.innerHTML; btn.innerHTML = '<span class="btn-icon">✅</span> 복사됨!';
-      setTimeout(() => btn.innerHTML = o, 1500);
+  // 헬퍼: baseY로부터 상대 오프셋 범위로 줄 찾기
+  // PDF.js Y는 위쪽이 큰 값 → 아래로 갈수록 Y 감소
+  // offset 양수 = 아래쪽
+  function findLineByOffset(offsetMin, offsetMax) {
+    return mergedLines.find(l => {
+      const off = baseY - l.y;
+      return off >= offsetMin && off <= offsetMax;
     });
   }
 
-  function clearAll() {
-    pdfFiles = []; extractedData = [];
-    renderFileList(); renderResultTable(); updateStats();
-    document.getElementById('btnExtract').disabled = true;
-    document.getElementById('btnDownload').disabled = true;
-    document.getElementById('debugArea').textContent = '';
-    log('초기화 완료', 'info');
+  // 두 PDF에서 확인된 상대 오프셋 (baseY=769 or 777 기준):
+  // 상호/대표자: offset ~18 (y≈751)
+  // 매장전화/휴대전화: offset ~37 (y≈732)
+  // 주소: offset ~55 (y≈714)
+  // 이메일: offset ~74 (y≈695)
+  // 운영시간: offset ~92 (y≈677)
+  // -- 운영회사 구간 건너뜀 --
+  // 은행명: offset ~178 (y≈591)
+  // 계좌번호: offset ~195 (y≈574)
+  // 명의주: offset ~210 (y≈559)
+  // 사업자번호: offset ~226 (y≈543)
+
+  const data = {};
+
+  // 계약체결일
+  const dateLine = mergedLines[dateLineIdx];
+  const dm = dateLine.text.match(/(\d{4})\s*년?\s*(\d{1,2})\s*월?\s*(\d{1,2})\s*일?/);
+  data.contractDate = dm ? `${dm[1]}-${dm[2].padStart(2,'0')}-${dm[3].padStart(2,'0')}` : '';
+
+  // 상호 / 대표자 (같은 줄, 탭으로 구분되거나 "대표자" 키워드로 분리)
+  const storeLine = findLineByOffset(14, 25);
+  if (storeLine) {
+    const st = storeLine.text;
+    const repMatch = st.match(/대표자[\s\t]+(.+)/);
+    const storeMatch = st.match(/상\s*호[\s\t]+(.+?)[\s\t]+대표자/);
+    if (storeMatch) data.storeName = storeMatch[1].trim();
+    else {
+      // "상 호" 없이 값만 있을 수도 있음
+      const parts = st.replace(/상\s*호/, '').split(/대표자/);
+      if (parts[0]) data.storeName = parts[0].replace(/[\t]/g, ' ').trim();
+    }
+    if (repMatch) data.representative = repMatch[1].trim();
   }
 
-  function log(msg, type = '') {
-    const area = document.getElementById('logArea');
-    const now = new Date();
-    const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-    const line = document.createElement('div');
-    line.className = `log-line ${type}`;
-    line.innerHTML = `<span class="log-time">[${t}]</span>${msg}`;
-    area.insertBefore(line, area.firstChild);
-    while (area.children.length > 100) area.removeChild(area.lastChild);
+  // 매장전화 / 휴대전화
+  const phoneLine = findLineByOffset(33, 42);
+  if (phoneLine) {
+    const pt = phoneLine.text;
+    const storePhoneMatch = pt.match(/매장전화번호[\s\t]+([\d\-]+)/);
+    const mobileMatch = pt.match(/휴대전화번호[\s\t]+([\d\-]+)/);
+    data.storePhone = storePhoneMatch ? storePhoneMatch[1] : '';
+    data.mobilePhone = mobileMatch ? mobileMatch[1] : '';
   }
-  function clearLog() { document.getElementById('logArea').innerHTML = ''; }
-  function toggleDebug() { document.getElementById('debugArea').classList.toggle('visible'); }
 
-  log('PDF 제휴점 계약서 추출기 준비 완료', 'info');
+  // 주소 (운영회사 주소 제외)
+  const addrLine = findLineByOffset(50, 62);
+  if (addrLine) {
+    let addr = addrLine.text.replace(/제휴점/, '').replace(/주\s*소/, '').replace(/[\t]/g, ' ').trim();
+    // (인) 제거
+    addr = addr.replace(/\(인\)/, '').trim();
+    if (addr.includes('강남구') || addr.includes('봉은사로')) addr = ''; // 운영회사 주소면 스킵
+    data.address = addr;
+  }
+
+  // 이메일
+  const emailLine = findLineByOffset(68, 80);
+  if (emailLine) {
+    let em = emailLine.text.replace(/이메일주소?/, '').replace(/[\t]/g, ' ').trim();
+    const emailMatch = em.match(/([\w.\-]+@[\w.\-]+\.\w+)/);
+    data.email = emailMatch ? emailMatch[1] : em;
+  }
+
+  // 운영시간
+  const timeLine = findLineByOffset(86, 100);
+  if (timeLine) {
+    data.operatingHours = timeLine.text.replace(/운영시간/, '').replace(/[\t]/g, ' ').trim();
+  }
+
+  // 은행명 (offset ~170~185)
+  const bankLine = findLineByOffset(170, 190);
+  if (bankLine) {
+    data.bankName = bankLine.text.replace(/은행명/, '').replace(/[\t]/g, ' ').trim();
+  }
+
+  // 계좌번호 (offset ~190~205)
+  const acctLine = findLineByOffset(190, 210);
+  if (acctLine) {
+    let acct = acctLine.text.replace(/계좌번호/, '').replace(/[\t]/g, ' ').trim();
+    data.accountNumber = acct;
+  }
+
+  // 명의주 (offset ~205~220)
+  const holderLine = findLineByOffset(205, 225);
+  if (holderLine) {
+    data.accountHolder = holderLine.text.replace(/계좌\s*명의주/, '').replace(/[\t]/g, ' ').trim();
+  }
+
+  // 사업자번호 (offset ~220~240)
+  const bizLine = findLineByOffset(220, 245);
+  if (bizLine) {
+    let biz = bizLine.text.replace(/사업자\s*등록번호/, '').replace(/[\t]/g, ' ').trim();
+    data.businessNumber = biz.replace(/-/g, '');
+  }
+
+  // 누락 보정: 오프셋이 안 맞을 경우 텍스트 기반 fallback
+  if (!data.storeName || !data.bankName) {
+    const allText = mergedLines.map(l => l.text).join('\n');
+    if (!data.storeName) {
+      const m = allText.match(/상\s*호[\s\t]+(.+?)[\s\t]*대표자/);
+      if (m) data.storeName = m[1].trim();
+    }
+    if (!data.representative) {
+      // 조정호(운영회사) 제외
+      for (const l of mergedLines) {
+        const m = l.text.match(/대표자[\s\t]+(\S+)/);
+        if (m && m[1] !== '조정호') { data.representative = m[1]; break; }
+      }
+    }
+    if (!data.storePhone) {
+      const m = allText.match(/매장전화번호[\s\t]+([\d\-]+)/);
+      if (m) data.storePhone = m[1];
+    }
+    if (!data.mobilePhone) {
+      const m = allText.match(/휴대전화번호[\s\t]+([\d\-]+)/);
+      if (m) data.mobilePhone = m[1];
+    }
+    if (!data.address) {
+      for (const l of mergedLines) {
+        const m = l.text.match(/주\s*소[\s\t]+(.+)/);
+        if (m && !m[1].includes('강남구') && !m[1].includes('봉은사로') && m[1].trim().length > 5) {
+          data.address = m[1].replace(/제휴점/, '').replace(/\(인\)/, '').trim();
+          break;
+        }
+      }
+    }
+    if (!data.email) {
+      const m = allText.match(/([\w.\-]+@[\w.\-]+\.\w+)/);
+      if (m) data.email = m[1];
+    }
+    if (!data.operatingHours) {
+      const m = allText.match(/운영시간[\s\t]+(\S+)/);
+      if (m) data.operatingHours = m[1];
+    }
+    if (!data.bankName) {
+      const m = allText.match(/은행명[\s\t]+(\S+)/);
+      if (m) data.bankName = m[1];
+    }
+    if (!data.accountNumber) {
+      const m = allText.match(/계좌번호[\s\t]+([\d\-]+)/);
+      if (m) data.accountNumber = m[1];
+    }
+    if (!data.accountHolder) {
+      const m = allText.match(/(?:계좌\s*)?명의주[\s\t]+(.+?)(?:\n|$)/);
+      if (m) data.accountHolder = m[1].trim();
+    }
+    if (!data.businessNumber) {
+      const m = allText.match(/사업자\s*등록번호[\s\t]+([\d\-]+)/);
+      if (m) data.businessNumber = m[1].replace(/-/g, '');
+    }
+  }
+
+  // 최종 검사
+  const fields = ['contractDate','storeName','representative','storePhone','mobilePhone','address','email','operatingHours','bankName','accountNumber','accountHolder','businessNumber'];
+  const missing = fields.filter(f => !data[f]);
+  if (missing.length > 0) log(`  ⚠ 누락: ${missing.join(', ')}`, 'error');
+
+  return data;
+}
+
+// ============================================================
+// 전체 추출
+// ============================================================
+async function extractAll() {
+  if (!pdfFiles.length) return;
+  const btn = document.getElementById('btnExtract');
+  btn.disabled = true; btn.innerHTML = '<span class="btn-icon">⏳</span> 처리 중...';
+  const pBar = document.getElementById('progressBar'), pFill = document.getElementById('progressFill');
+  pBar.classList.add('active');
+  extractedData = [];
+  const total = pdfFiles.length;
+  log(`추출 시작 - ${total}개 파일`, 'info');
+
+  for (let i = 0; i < total; i++) {
+    const pf = pdfFiles[i];
+    pf.status = 'processing'; renderFileList();
+    pFill.style.width = `${(i/total)*100}%`;
+    try {
+      log(`[${i+1}/${total}] ${pf.name}`);
+      const data = await extractDataFromPDF(pf.file);
+      document.getElementById('debugArea').textContent = `=== ${pf.name} ===\n${lastRawText}`;
+      if (data && (data.storeName || data.businessNumber || data.storePhone)) {
+        data._fileName = pf.name; extractedData.push(data);
+        pf.status = 'done'; log(`  ✓ ${data.storeName || '(상호없음)'}`, 'success');
+      } else { pf.status = 'error'; log(`  ✗ 데이터 없음`, 'error'); }
+    } catch (err) { pf.status = 'error'; log(`  ✗ ${err.message}`, 'error'); }
+    renderFileList(); pFill.style.width = `${((i+1)/total)*100}%`;
+  }
+  renderResultTable(); updateStats();
+  log(`완료! 성공: ${extractedData.length}/${total}`, extractedData.length ? 'success' : 'error');
+  btn.disabled = false; btn.innerHTML = '<span class="btn-icon">⚡</span> 전체 추출';
+  document.getElementById('btnDownload').disabled = !extractedData.length;
+  setTimeout(() => pBar.classList.remove('active'), 1000);
+}
+
+// ============================================================
+// 테이블 / 엑셀 / 클립보드
+// ============================================================
+function renderResultTable() {
+  const wrap = document.getElementById('tableWrap');
+  document.getElementById('resultBadge').textContent = extractedData.length;
+  const btnCopy = document.getElementById('btnCopy');
+  if (!extractedData.length) { wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div>추출 결과가 여기에 표시됩니다</div>'; btnCopy.style.display = 'none'; return; }
+  btnCopy.style.display = '';
+  const H = ['#','체결일','상호','대표자','매장전화','휴대전화','주소','이메일','운영시간','은행명','계좌번호','명의주','사업자번호'];
+  const K = ['contractDate','storeName','representative','storePhone','mobilePhone','address','email','operatingHours','bankName','accountNumber','accountHolder','businessNumber'];
+  let html = '<table><thead><tr>' + H.map(h=>`<th>${h}</th>`).join('') + '</tr></thead><tbody>';
+  extractedData.forEach((d,i) => {
+    html += '<tr><td class="row-num">'+(i+1)+'</td>' + K.map(k=>`<td${k==='address'?' class="address"':''} title="${(d[k]||'').replace(/"/g,'&quot;')}">${d[k]||'-'}</td>`).join('') + '</tr>';
+  });
+  wrap.innerHTML = html + '</tbody></table>';
+}
+function downloadExcel() {
+  if (!extractedData.length) return;
+  const H = ['체결일','상호','대표자','매장전화번호','휴대전화번호','주소','이메일','운영시간','은행명','계좌번호','명의주','사업자번호'];
+  const K = ['contractDate','storeName','representative','storePhone','mobilePhone','address','email','operatingHours','bankName','accountNumber','accountHolder','businessNumber'];
+  const ws = XLSX.utils.aoa_to_sheet([H, ...extractedData.map(d=>K.map(k=>d[k]||''))]);
+  ws['!cols'] = [{wch:12},{wch:15},{wch:10},{wch:14},{wch:14},{wch:35},{wch:25},{wch:14},{wch:12},{wch:18},{wch:15},{wch:14}];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, '제휴점 계약 데이터');
+  const d = new Date();
+  XLSX.writeFile(wb, `제휴점_계약추출_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.xlsx`);
+  log('엑셀 다운로드 완료', 'success');
+}
+function copyToClipboard() {
+  if (!extractedData.length) return;
+  const H = ['체결일','상호','대표자','매장전화번호','휴대전화번호','주소','이메일','운영시간','은행명','계좌번호','명의주','사업자번호'];
+  const K = ['contractDate','storeName','representative','storePhone','mobilePhone','address','email','operatingHours','bankName','accountNumber','accountHolder','businessNumber'];
+  let tsv = H.join('\t')+'\n'; extractedData.forEach(d => tsv += K.map(k=>d[k]||'').join('\t')+'\n');
+  navigator.clipboard.writeText(tsv).then(() => {
+    log('클립보드 복사 완료', 'success');
+    const b = document.getElementById('btnCopy'), o = b.innerHTML;
+    b.innerHTML = '<span class="btn-icon">✅</span> 복사됨!'; setTimeout(()=>b.innerHTML=o, 1500);
+  });
+}
+
+// 유틸
+function clearAll() {
+  pdfFiles=[]; extractedData=[];
+  renderFileList(); renderResultTable(); updateStats();
+  document.getElementById('btnExtract').disabled = true;
+  document.getElementById('btnDownload').disabled = true;
+  document.getElementById('debugArea').textContent = '';
+  log('초기화', 'info');
+}
+function log(msg, type='') {
+  const a = document.getElementById('logArea'), now = new Date();
+  const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  const l = document.createElement('div'); l.className = `log-line ${type}`;
+  l.innerHTML = `<span class="log-time">[${t}]</span>${msg}`;
+  a.insertBefore(l, a.firstChild);
+  while (a.children.length > 100) a.removeChild(a.lastChild);
+}
+function clearLog() { document.getElementById('logArea').innerHTML = ''; }
+function toggleDebug() { document.getElementById('debugArea').classList.toggle('visible'); }
+log('준비 완료', 'info');
 </script>
 </body>
 </html>
