@@ -372,13 +372,20 @@
   }
 
   // ============================================================
-  // PDF 텍스트 추출 (PDF.js) - Y좌표 그룹핑 + X간격 공백 삽입
+  // PDF 데이터 추출 (PDF.js) - 좌표 기반 직접 필드 추출
+  //
+  // 계약서 양식의 값 필드가 고정 좌표에 위치하는 점을 활용:
+  //   - 제휴점 값: x ≈ 199~200
+  //   - 대표자/휴대전화: x ≈ 371
+  //   - 월/일: x ≈ 213, 243
+  //   - 각 필드는 고유한 Y좌표를 가짐
   // ============================================================
-  async function extractTextFromPDF(file) {
+  async function extractDataFromPDF(file) {
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
     const numPages = pdf.numPages;
 
+    // "계약체결일"과 "은행명"이 모두 있는 페이지 찾기
     let targetPage = null;
     for (let p = numPages; p >= 1; p--) {
       const page = await pdf.getPage(p);
@@ -393,135 +400,166 @@
 
     const content = await targetPage.getTextContent();
     const items = content.items;
-    if (items.length === 0) return '';
+    if (items.length === 0) return null;
 
+    // 모든 텍스트 아이템을 {x, y, text}로 수집
     const allItems = [];
     for (const item of items) {
-      if (!item.str || item.str.trim() === '') continue;
-      allItems.push({ x: item.transform[4], y: item.transform[5], w: item.width || 0, text: item.str });
+      const text = item.str.trim();
+      if (!text) continue;
+      allItems.push({
+        x: Math.round(item.transform[4]),
+        y: Math.round(item.transform[5]),
+        text: text
+      });
     }
 
-    allItems.sort((a, b) => b.y - a.y || a.x - b.x);
+    // 디버그용 raw 데이터 생성
+    const debugLines = allItems
+      .sort((a, b) => b.y - a.y || a.x - b.x)
+      .map(it => `x=${it.x} y=${it.y} | [${it.text}]`);
+    lastRawText = debugLines.join('\n');
 
-    const lines = [];
-    let currentLine = [allItems[0]];
-    let currentY = allItems[0].y;
-
-    for (let i = 1; i < allItems.length; i++) {
-      const item = allItems[i];
-      if (Math.abs(item.y - currentY) <= 3) {
-        currentLine.push(item);
-      } else {
-        lines.push([...currentLine]);
-        currentLine = [item];
-        currentY = item.y;
-      }
+    // ---- 좌표 기반 필드 추출 ----
+    // 헬퍼: 특정 좌표 범위의 아이템 찾기
+    function findItem(xMin, xMax, yMin, yMax) {
+      const found = allItems.filter(it =>
+        it.x >= xMin && it.x <= xMax && it.y >= yMin && it.y <= yMax
+      );
+      // Y좌표 우선, 같으면 X좌표 순
+      found.sort((a, b) => b.y - a.y || a.x - b.x);
+      return found.length > 0 ? found[0].text : '';
     }
-    lines.push(currentLine);
 
-    const reconstructedLines = [];
-    for (const line of lines) {
-      line.sort((a, b) => a.x - b.x);
-      let lineText = '';
-      for (let i = 0; i < line.length; i++) {
-        if (i === 0) { lineText = line[i].text; continue; }
-        const prevEnd = line[i - 1].x + line[i - 1].w;
-        const gap = line[i].x - prevEnd;
-        lineText += (gap > 3 ? ' ' : '') + line[i].text;
-      }
-      reconstructedLines.push(lineText.trim());
+    // 헬퍼: 특정 좌표 범위의 모든 아이템 텍스트 합치기
+    function findItemsJoined(xMin, xMax, yMin, yMax) {
+      const found = allItems.filter(it =>
+        it.x >= xMin && it.x <= xMax && it.y >= yMin && it.y <= yMax
+      );
+      found.sort((a, b) => a.x - b.x);
+      return found.map(it => it.text).join(' ').trim();
     }
-    return reconstructedLines.join('\n');
-  }
 
-  // ============================================================
-  // 데이터 파싱
-  // ============================================================
-  function parseContractData(text) {
+    // ---- 먼저 "계약체결일" 라벨의 Y좌표를 기준점으로 잡기 ----
+    const dateLabelItem = allItems.find(it => it.text.includes('계약체결일'));
+    if (!dateLabelItem) return null;
+    const baseY = dateLabelItem.y; // 기준 Y (약 65)
+
+    // 상호 라벨 Y 찾기
+    const storeLabelItem = allItems.find(it => it.text.includes('상') && it.text.includes('호') && it.y > baseY - 30 && it.y < baseY + 30);
+    const storeLabelY = storeLabelItem ? storeLabelItem.y : baseY + 18;
+
+    // 각 필드의 예상 Y 오프셋 (baseY 기준 상대 좌표)
+    // 실제 좌표를 기반으로 동적 매핑
+    const fieldMap = {};
+
+    // 값 컬럼 X범위: 195~210 (제휴점 값), 365~380 (대표자/휴대전화)
+    const VAL_X_MIN = 190;
+    const VAL_X_MAX = 380;
+    const VAL_X_LEFT_MIN = 190;
+    const VAL_X_LEFT_MAX = 260;
+    const VAL_X_RIGHT_MIN = 360;
+    const VAL_X_RIGHT_MAX = 420;
+
+    // 라벨들의 Y좌표 찾아서 필드 위치 동적 결정
+    const labels = {};
+    const labelKeywords = [
+      { key: 'storeName', text: '상', partial: true },
+      { key: 'storePhone', text: '매장전화번호' },
+      { key: 'address', text: '주', partial: true, filter: (it) => it.x >= 140 && it.x <= 160 && it.y > baseY + 40 && it.y < baseY + 70 },
+      { key: 'email', text: '이메일' },
+      { key: 'operatingHours', text: '운영시간' },
+      { key: 'bankName', text: '은행명' },
+      { key: 'accountNumber', text: '계좌번호' },
+      { key: 'accountHolder', text: '명의주' },
+      { key: 'businessNumber', text: '사업자' },
+    ];
+
+    // 값 컬럼(x≈199~200)에 있는 아이템들을 Y순으로 정렬
+    const valueItems = allItems
+      .filter(it => it.x >= 195 && it.x <= 210 && it.y > baseY)
+      .sort((a, b) => a.y - b.y);
+
+    // 대표자/휴대전화 컬럼(x≈371)
+    const rightItems = allItems
+      .filter(it => it.x >= 360 && it.x <= 420 && it.y > baseY && it.y < baseY + 60)
+      .sort((a, b) => a.y - b.y);
+
+    // ---- 계약서 양식의 고정 순서를 활용 ----
+    // 값 컬럼의 Y좌표 순서:
+    // 1. 상호 (y≈80)
+    // 2. 매장전화 (y≈100)
+    // 3. 주소 (y≈117)
+    // 4. 이메일 (y≈136)
+    // 5. 운영시간 (y≈156)
+    // ... (운영회사 정보 건너뜀) ...
+    // 6. 은행명 (y≈241)
+    // 7. 계좌번호 (y≈257)
+    // 8. 명의주 (y≈272)
+    // 9. 사업자번호 (y≈288)
+
     const data = {};
-    const lines = text.split('\n').map(l => l.trim()).filter(l => l);
-    lastRawText = text;
 
-    function findLine(kw) { return lines.find(l => l.includes(kw)) || ''; }
-    function findLines(kw) { return lines.filter(l => l.includes(kw)); }
+    // 값 아이템을 순서대로 할당
+    // 제휴점 영역 (baseY ~ baseY+110): 상호, 매장전화, 주소, 이메일, 운영시간
+    const partnerVals = valueItems.filter(it => it.y >= baseY + 10 && it.y <= baseY + 100);
+    // 은행 영역 (baseY+160 이상): 은행명, 계좌번호, 명의주, 사업자번호
+    const bankVals = valueItems.filter(it => it.y >= baseY + 160 && it.y <= baseY + 240);
 
-    // 1. 계약체결일
-    const dateLine = findLine('계약체결일');
-    let m = dateLine.match(/(\d{4})\s*년?\s*(\d{1,2})\s*월?\s*(\d{1,2})\s*일?/);
-    if (!m) m = text.match(/계약체결일[^\n]*?(\d{4})\s*년?[\s\S]*?(\d{1,2})\s*월?\s*(\d{1,2})\s*일?/);
-    data.contractDate = m ? `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}` : '';
+    // 제휴점 값 할당 (순서 고정: 상호, 매장전화, 주소, 이메일, 운영시간)
+    if (partnerVals.length >= 1) data.storeName = partnerVals[0].text;
+    if (partnerVals.length >= 2) data.storePhone = partnerVals[1].text;
+    if (partnerVals.length >= 3) data.address = partnerVals[2].text;
+    if (partnerVals.length >= 4) data.email = partnerVals[3].text;
+    if (partnerVals.length >= 5) data.operatingHours = partnerVals[4].text;
 
-    // 2. 상호 & 대표자
-    const storeLine = findLine('상 호') || findLine('상호');
-    m = storeLine.match(/상\s*호\s+(.+?)\s+대표자\s+(\S+)/);
-    if (m) {
-      data.storeName = m[1].trim();
-      data.representative = m[2].trim();
+    // 오른쪽 컬럼: 대표자(첫번째), 휴대전화(두번째)
+    if (rightItems.length >= 1) data.representative = rightItems[0].text;
+    if (rightItems.length >= 2) data.mobilePhone = rightItems[1].text;
+
+    // 은행 영역 할당 (순서 고정: 은행명, 계좌번호, 명의주, 사업자번호)
+    if (bankVals.length >= 1) data.bankName = bankVals[0].text;
+    if (bankVals.length >= 2) data.accountNumber = bankVals[1].text;
+    if (bankVals.length >= 3) data.accountHolder = bankVals[2].text;
+    if (bankVals.length >= 4) {
+      data.businessNumber = bankVals[3].text.replace(/-/g, '');
+    }
+
+    // 계약체결일: "2026 년 월 일" + 별도 위치의 월/일 숫자
+    const yearMatch = allItems.find(it => it.text.includes('2026') || it.text.includes('2025') || it.text.includes('2027'));
+    let year = '', month = '', day = '';
+    if (yearMatch) {
+      const ym = yearMatch.text.match(/(\d{4})/);
+      if (ym) year = ym[1];
+    }
+    // 월/일은 보통 x≈213, x≈243 위치에 단독 숫자로 존재
+    const dateNumbers = allItems
+      .filter(it => it.x >= 205 && it.x <= 250 && Math.abs(it.y - baseY) <= 5 && /^\d{1,2}$/.test(it.text))
+      .sort((a, b) => a.x - b.x);
+    if (dateNumbers.length >= 2) {
+      month = dateNumbers[0].text;
+      day = dateNumbers[1].text;
+    } else if (dateNumbers.length === 1) {
+      // 년월일이 한 텍스트에 있을 수 있음
+      month = dateNumbers[0].text;
+    }
+
+    if (year && month && day) {
+      data.contractDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    } else if (year) {
+      // fallback: 텍스트에서 추출 시도
+      const allText = allItems.map(it => it.text).join(' ');
+      const dm = allText.match(/(\d{4})\s*년\s*(\d{1,2})\s*월?\s*(\d{1,2})/);
+      if (dm) {
+        data.contractDate = `${dm[1]}-${dm[2].padStart(2, '0')}-${dm[3].padStart(2, '0')}`;
+      } else {
+        data.contractDate = year;
+      }
     } else {
-      data.storeName = ''; data.representative = '';
-      if (storeLine) {
-        let cleaned = storeLine.replace(/상\s*호/, '').trim();
-        const repIdx = cleaned.indexOf('대표자');
-        if (repIdx >= 0) {
-          data.storeName = cleaned.substring(0, repIdx).trim();
-          data.representative = cleaned.substring(repIdx + 3).trim();
-        } else { data.storeName = cleaned; }
-      }
-      if (!data.representative) {
-        for (const l of findLines('대표자')) {
-          m = l.match(/대표자\s+(\S+)/);
-          if (m && m[1] !== '조정호') { data.representative = m[1]; break; }
-        }
-      }
+      data.contractDate = '';
     }
 
-    // 3. 매장전화
-    const phoneLine = findLine('매장전화번호');
-    m = phoneLine.match(/매장전화번호\s+([\d\-]+)/);
-    data.storePhone = m ? m[1] : '';
-
-    // 4. 휴대전화
-    m = (phoneLine || text).match(/휴대전화번호\s+([\d\-]+)/);
-    data.mobilePhone = m ? m[1] : '';
-
-    // 5. 주소
-    data.address = '';
-    for (const l of findLines('주 소').concat(findLines('주소'))) {
-      const am = l.match(/주\s*소\s+(.+)/);
-      if (am) {
-        const addr = am[1].trim();
-        if (!addr.includes('강남구') && !addr.includes('삼성동') && !addr.includes('봉은사로') && addr.length > 5) {
-          data.address = addr; break;
-        }
-      }
-    }
-
-    // 6. 이메일
-    const emailLine = findLine('이메일');
-    m = emailLine.match(/이메일주소?\s+(\S+@\S+)/);
-    if (!m) m = text.match(/([\w.\-]+@[\w.\-]+\.\w+)/);
-    data.email = m ? m[1] : '';
-
-    // 7. 운영시간
-    m = findLine('운영시간').match(/운영시간\s+(\S+)/);
-    data.operatingHours = m ? m[1] : '';
-
-    // 8. 은행명
-    m = findLine('은행명').match(/은행명\s+(\S+)/);
-    data.bankName = m ? m[1] : '';
-
-    // 9. 계좌번호
-    m = findLine('계좌번호').match(/계좌번호\s+([\d\-]+)/);
-    data.accountNumber = m ? m[1] : '';
-
-    // 10. 명의주
-    m = findLine('명의주').match(/명의주\s+(\S+)/);
-    data.accountHolder = m ? m[1] : '';
-
-    // 11. 사업자번호
-    m = findLine('사업자').match(/사업자\s*등록번호\s+([\d\-]+)/);
-    data.businessNumber = m ? m[1].replace(/-/g, '') : '';
-
+    // 누락 필드 검사
     const fields = ['contractDate','storeName','representative','storePhone','mobilePhone','address','email','operatingHours','bankName','accountNumber','accountHolder','businessNumber'];
     const missing = fields.filter(f => !data[f]);
     if (missing.length > 0) log(`  ⚠ 누락: ${missing.join(', ')}`, 'error');
@@ -549,10 +587,9 @@
       pFill.style.width = `${(i / total) * 100}%`;
       try {
         log(`[${i+1}/${total}] ${pf.name}`);
-        const text = await extractTextFromPDF(pf.file);
-        document.getElementById('debugArea').textContent = `=== ${pf.name} ===\n${text}`;
-        const data = parseContractData(text);
-        if (data.storeName || data.businessNumber || data.storePhone) {
+        const data = await extractDataFromPDF(pf.file);
+        document.getElementById('debugArea').textContent = `=== ${pf.name} ===\n${lastRawText}`;
+        if (data && (data.storeName || data.businessNumber || data.storePhone)) {
           data._fileName = pf.name; extractedData.push(data);
           pf.status = 'done'; log(`  ✓ ${data.storeName || '(상호없음)'}`, 'success');
         } else { pf.status = 'error'; log(`  ✗ 데이터 없음`, 'error'); }
