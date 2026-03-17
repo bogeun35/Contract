@@ -159,7 +159,8 @@
 
 <div class="tab-container">
   <nav class="tab-nav">
-    <button class="tab-btn active" data-tab="settlement">정산서 확인방법</button>
+    <button class="tab-btn active" data-tab="notice">협조문</button>
+    <button class="tab-btn" data-tab="settlement">정산서 확인방법</button>
     <button class="tab-btn" data-tab="cert">공동인증서 등록</button>
     <button class="tab-btn" data-tab="changes">주요 변경사항 / 안내</button>
   </nav>
@@ -167,8 +168,19 @@
 
 <div class="content">
 
+  <!-- ======== TAB 0: 협조문 ======== -->
+  <div class="tab-panel active" id="tab-notice">
+    <div class="card">
+      <div class="card-title">식권대장 정산 프로세스 변경 적용 지연 안내의 건</div>
+      <div class="img-area">
+        <img src="https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/5BF3640D-7275-47DA-BE02-C6D55820A41F.jpg" alt="협조문 - 식권대장 정산 프로세스 변경 적용 지연 안내">
+        <div class="img-area-caption">벤디스 협조문 (2023.06.28) - 식권대장 제휴점 이용대금 정산 관련 프로세스 개선</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ======== TAB 1: 정산서 확인방법 ======== -->
-  <div class="tab-panel active" id="tab-settlement">
+  <div class="tab-panel" id="tab-settlement">
     <div class="card">
       <div class="card-title">매출 정산 확인 및 세금계산서 발행</div>
       <div class="note note-info" style="margin-top:0; margin-bottom:16px;">
@@ -336,7 +348,7 @@
           <tr>
             <td style="font-weight:500">공동인증서 등록</td>
             <td>바로빌 사이트에서 등록</td>
-            <td>바로빌 사이트 또는 <strong>식권대장 내</strong> 등록</td>
+            <td><strong>식권대장 사장님 내</strong> 등록</td>
           </tr>
         </tbody>
       </table>
@@ -396,6 +408,17 @@
     <div class="card">
       <div class="card-title">안내 및 주의사항</div>
       <div class="accordion-item open">
+        <button class="accordion-header">
+          <span>모바일로도 승인 가능한가요?</span>
+          <span class="arrow">&#9660;</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            식권대장 사장님 또는 바로빌 PC로 접속하여 공동인증서 등록을 해주신 경우, <strong>식권대장 사장님 앱</strong> 내에서도 승인하실 수 있습니다.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
         <button class="accordion-header">
           <span>등록 가능한 인증서 유형을 확인해 주세요</span>
           <span class="arrow">&#9660;</span>
