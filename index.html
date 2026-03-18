@@ -68,6 +68,7 @@
 
   .badge { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 100px; vertical-align: middle; }
   .badge-new { background: var(--accent-green-light); color: var(--accent-green); }
+  .badge-blue { background: #E3F2FD; color: #1565C0; }
   .badge-old { background: #F5F5F5; color: var(--text-sub); text-decoration: line-through; }
   .badge-warn { background: var(--accent-orange-light); color: var(--accent-orange); }
   .badge-danger { background: var(--accent-red-light); color: var(--accent-red); }
@@ -99,6 +100,41 @@
   .flow-step { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; white-space: nowrap; }
   .flow-step.highlight { background: var(--primary); color: #fff; border-color: var(--primary); }
   .flow-arrow { color: var(--text-sub); font-size: 14px; }
+
+  /* KEY NOTICE BANNER */
+  .key-notice {
+    background: var(--bg);
+    border: 2px solid var(--primary);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .key-notice-label {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--primary);
+    padding: 2px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .key-notice-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .key-notice-desc {
+    font-size: 14px;
+    color: var(--text-sub);
+    line-height: 1.8;
+  }
+  .key-notice-desc strong {
+    color: var(--text);
+  }
 
   /* LIGHTBOX */
   .lightbox-overlay {
@@ -140,6 +176,8 @@
     .header-title { font-size: 18px; }
     .tab-btn { padding: 8px 14px; font-size: 13px; }
     .card { padding: 18px 16px; }
+    .key-notice { padding: 16px 18px; }
+    .key-notice-title { font-size: 15px; }
     .img-area-inner { min-height: 120px; padding: 20px 12px; }
     .img-area.popup-img img { max-width: 280px; }
   }
@@ -173,8 +211,8 @@
     <div class="card">
       <div class="card-title">세금계산서 발행 서비스 변경에 따른 협조 요청의 건</div>
       <div class="img-area">
-        <img src="https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/20DE0685-8AEC-4497-A2CB-1F22BE2A8090.png" alt="협조문 - 세금계산서 발행 서비스 변경에 따른 협조 요청의 건">
-        <div class="img-area-caption">벤디스 협조문 (2026.03.23) - 세금계산서 발행 서비스 변경에 따른 협조 요청의 건</div>
+        <img src="https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/B2195047-0CA1-4CED-B484-5A2061B781FF.png" alt="협조문 - 세금계산서 발행 서비스 변경에 따른 협조 요청의 건">
+        <div class="img-area-caption">벤디스 협조문 (2026.03.18) - 세금계산서 발행 서비스 변경에 따른 협조 요청의 건</div>
       </div>
     </div>
   </div>
@@ -209,8 +247,8 @@
         <li>
           <div class="step-title">내 모든 사업장(제휴점)의 정산내역을 확인합니다.</div>
           <div class="step-desc">
-            진입 시 조회기간에 해당하는 전체 정산내역이 표시됩니다.<br>
-            정산월, 시작일/종료일, 사업자명, 매출금액, 수수료, 정산(예정)금액, 정산 확정, 증빙 처리, 입금 처리 상태를 한눈에 확인할 수 있습니다.
+            조회기간 내 전체 정산내역이 표시됩니다.<br>
+            매출금액, 수수료, 정산금액, 정산 확정, 증빙 처리, 입금 상태를 한눈에 확인할 수 있습니다.
           </div>
           <div class="img-area">
             <img src="https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/3262E28E-1761-489E-8975-3F2BE801DF9C.png" alt="정산내역 목록">
@@ -220,9 +258,8 @@
         <li>
           <div class="step-title">정산서 상세에서 거래내역, 사업자 정보를 확인합니다.</div>
           <div class="step-desc">
-            정산 항목을 클릭하면 매출 상세 페이지로 진입합니다.<br>
-            정산서 개요(진행 상태, 매출 기간, 정산 금액, 입금 일정), 사업자 정보를 확인하고,<br>
-            하단 탭에서 거래 내역 / 증빙 내역 / 입금/이체 내역을 각각 조회할 수 있습니다.
+            정산 항목을 클릭하면 상세 페이지로 진입합니다.<br>
+            정산서 개요, 사업자 정보를 확인하고, 하단에서 거래 내역 / 증빙 내역 / 입금 내역을 조회할 수 있습니다.
           </div>
           <div class="img-area">
             <img src="https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/4EB2CCD9-9469-4D99-9E5D-7B595D008328.png" alt="매출 상세 - 증빙 내역">
@@ -232,8 +269,8 @@
         <li>
           <div class="step-title">확인이 완료되면 우측 상단 [세금계산서 발급] 버튼을 클릭합니다.</div>
           <div class="step-desc">
-            매출 상세 페이지 우측 상단의 <strong>[세금계산서 발급]</strong> 버튼을 클릭하면 발급 확인 팝업이 나타납니다.<br>
-            "매출 증빙내역의 세금계산서 정보를 확인하셨습니까?" 메시지를 확인한 뒤 [확인]을 선택하면 세금계산서가 발급됩니다.
+            우측 상단 <strong>[세금계산서 발급]</strong> 버튼을 클릭하면 확인 팝업이 나타납니다.<br>
+            내용 확인 후 [확인]을 누르면 세금계산서가 발급됩니다.
           </div>
           <div class="img-area">
             <img src="https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/2E17030A-1764-4D9A-AF88-7E317B3D588F.png" alt="매출 상세 - 세금계산서 발급 버튼">
@@ -243,8 +280,8 @@
         <li>
           <div class="step-title">증빙 마감일 내 완료 시 입금예정일에 실제 입금이 진행됩니다.</div>
           <div class="step-desc">
-            세금계산서 발급과 정산 확정이 완료되면, 입금예정일에 맞춰 실제 입금 처리가 진행됩니다.<br>
-            입금 처리 상태는 매출 정산 목록의 [입금 처리] 항목 또는 매출 상세의 [입금/이체 내역] 탭에서 확인할 수 있습니다.
+            세금계산서 발급이 완료되면, 입금예정일에 맞춰 입금됩니다.<br>
+            입금 상태는 정산 목록 또는 상세 페이지의 [입금/이체 내역]에서 확인하세요.
           </div>
           <div class="img-area">
             <img src="https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/CC286CF7-BC27-417B-8D8C-6CF24ACB2880.png" alt="매출 상세 - 입금/이체 내역">
@@ -254,17 +291,27 @@
       </ol>
 
       <div class="note note-warn" style="margin-top:16px">
-        매출 금액은 매일 1회 업데이트 됩니다. 정산에 이상이 있는 경우 하단의 1:1 문의를 이용해주세요.<br>
-        고객사와 직접거래가 있는 경우 정산금액에서 제외되어 노출됩니다.<br>
-        그룹 정산(프랜차이즈)으로 진행되는 경우 정산서가 노출되지 않습니다.
+        매출 금액은 하루 1회 업데이트됩니다. 이상이 있으면 하단 1:1 문의를 이용해 주세요.<br>
+        고객사 직접거래 건은 정산금액에서 제외됩니다. 프랜차이즈(그룹 정산)는 정산서가 표시되지 않습니다.
       </div>
     </div>
   </div>
 
   <!-- ======== TAB 2: 공동인증서 등록 ======== -->
   <div class="tab-panel" id="tab-cert">
+
+    <!-- KEY NOTICE: 이미 등록한 분은 추가 등록 불필요 -->
+    <div class="key-notice">
+      <div class="key-notice-label">확인해 주세요</div>
+      <div class="key-notice-title">이미 바로빌에 공동인증서를 등록하셨다면, 추가 등록이 필요 없습니다.</div>
+      <div class="key-notice-desc">
+        기존에 바로빌 역발행을 통해 바로빌 사이트에서 공동인증서를 등록하신 경우, 자동 연동되어 <strong>그대로 사용 가능</strong>합니다.<br>
+        공동인증서 만료일 전까지 세금계산서 발행이 가능하며, 만료 시에만 재등록이 필요합니다.
+      </div>
+    </div>
+
     <div class="card">
-      <div class="card-title">공동인증서 등록 방법</div>
+      <div class="card-title">신규 공동인증서 등록 방법</div>
       <div class="note note-info" style="margin-top:0; margin-bottom:16px;">
         <div class="flow">
           <span class="flow-step">[내 계약 정보] 진입</span>
@@ -279,10 +326,9 @@
 
       <ol class="step-list">
         <li>
-          <div class="step-title">좌측 메뉴에서 [내 계약 정보]를 선택한 뒤, 인증서 정보 영역의 [공동 인증서 등록] 버튼을 클릭합니다.</div>
+          <div class="step-title">[내 계약 정보] > [공동 인증서 등록] 버튼을 클릭합니다.</div>
           <div class="step-desc">
-            내 계약 정보 페이지에서 인증서 정보 영역을 확인합니다.<br>
-            증빙 발행 유형이 [전자세금용 인증서 등록]인 경우, 우측의 <strong>[공동 인증서 등록]</strong> 버튼을 클릭하세요.
+            좌측 메뉴의 [내 계약 정보]에서 인증서 정보 영역을 확인하고, <strong>[공동 인증서 등록]</strong> 버튼을 클릭하세요.
           </div>
           <div class="img-area">
             <img src="https://s3.ap-northeast-2.amazonaws.com/vendys.etc/etc-filestorage/F6C21278-0A14-4D2B-A525-D764D702AE25.png" alt="내 계약 정보 - 공동 인증서 등록 버튼">
@@ -292,12 +338,10 @@
         <li>
           <div class="step-title">바로빌 공동인증서 등록 팝업에서 [인증서 등록]을 진행합니다.</div>
           <div class="step-desc">
-            [공동 인증서 등록] 클릭 시 바로빌 인증서 등록 팝업이 열립니다.<br>
-            팝업 내 <strong>[사용가능 인증서 확인]</strong> 버튼을 클릭하여 PC에 저장된 인증서 목록을 확인하고,<br>
-            등록할 인증서를 선택한 뒤 <strong>[인증서 등록]</strong> 버튼을 클릭하면 등록이 완료됩니다.
+            바로빌 인증서 등록 팝업이 열립니다.<br>
+            <strong>[사용가능 인증서 확인]</strong>으로 PC 내 인증서를 확인한 뒤, 선택하고 <strong>[인증서 등록]</strong>을 클릭하세요.
           </div>
           <div class="note note-warn" style="margin-top:8px">
-            인증서 등록 전, 반드시 사용 가능한 인증서인지 확인해 주세요.<br>
             등록 가능: <strong>전자세금용</strong> / <strong>사업자 범용</strong> / <strong>바로빌 특목용</strong><br>
             등록 불가: 개인범용(4,400원), 뱅킹용, 은행용, 증권용, 보험용 등
           </div>
@@ -309,16 +353,11 @@
         <li>
           <div class="step-title">새창에서 공동인증서 등록이 완료되면, [닫기] 버튼을 클릭합니다.</div>
           <div class="step-desc">
-            등록 완료 후 "새창에서 공동인증서 등록이 완료된 다음 [닫기] 버튼을 클릭해주세요" 안내에 따라 [닫기]를 선택합니다.<br>
-            내 계약 정보의 인증서 등록 상태가 <strong>[등록 완료]</strong>로 변경되었는지 확인해 주세요.
+            등록 완료 후 팝업의 [닫기]를 클릭하세요.<br>
+            내 계약 정보에서 인증서 상태가 <strong>[등록 완료]</strong>로 바뀌었는지 확인해 주세요.
           </div>
         </li>
       </ol>
-
-      <div class="note note-info" style="margin-top:16px">
-        이미 바로빌에 공동인증서를 등록하신 경우, 연동되어 그대로 사용 가능합니다.<br>
-        공동인증서 만료일 전까지 세금계산서 발행이 가능하며, 만료 시 재등록이 필요합니다.
-      </div>
     </div>
   </div>
 
@@ -337,25 +376,24 @@
         <tbody>
           <tr>
             <td style="font-weight:500">발행 위치</td>
-            <td><span class="badge badge-old">바로빌</span> 바로빌 사이트 > 세금계산서 목록</td>
-            <td><span class="badge badge-new">사장님 사이트</span> 식권대장 사장님 > 매출 정산</td>
+            <td><span class="badge badge-blue">바로빌</span> 바로빌 사이트 > 세금계산서 목록</td>
+            <td><span class="badge badge-new">사장님 사이트</span> 매출 정산 메뉴</td>
           </tr>
           <tr>
             <td style="font-weight:500">발행 방식</td>
-            <td><span class="badge badge-old">승인</span> 세금계산서 승인 (바로빌)</td>
-            <td><span class="badge badge-new">직접 발급</span> 세금계산서 직접 발급</td>
+            <td><span class="badge badge-blue">바로빌</span> 세금계산서 승인</td>
+            <td><span class="badge badge-new">사장님 사이트</span> 세금계산서 직접 발급</td>
           </tr>
           <tr>
             <td style="font-weight:500">공동인증서 등록</td>
-            <td>바로빌 사이트에서 등록</td>
-            <td><strong>식권대장 사장님 내</strong> 등록</td>
+            <td><span class="badge badge-blue">바로빌</span> 바로빌 사이트에서 등록</td>
+            <td><span class="badge badge-new">사장님 사이트</span> 사장님 사이트에서 등록</td>
           </tr>
         </tbody>
       </table>
       <div class="note note-info" style="margin-top:16px">
-        세금계산서 직접 발행 기능을 이용하시려면, <strong>본인인증(공동인증서 등록)</strong>이 필수입니다.<br>
-        [식권대장 사장님] 사이트에 접속하셔서 본인인증을 진행해 주세요.<br>
-        이미 바로빌에 공동인증서를 등록하신 경우, 연동되어 그대로 사용 가능합니다.
+        세금계산서 직접 발행에는 <strong>공동인증서 등록</strong>이 필수입니다.<br>
+        사장님 사이트에 접속하여 등록해 주세요. 기존 바로빌 등록자는 별도 등록 없이 사용 가능합니다.
       </div>
     </div>
 
@@ -414,7 +452,7 @@
         </button>
         <div class="accordion-body">
           <div class="accordion-body-inner">
-            식권대장 사장님 또는 바로빌 PC로 접속하여 공동인증서 등록을 해주신 경우, <strong>식권대장 사장님 앱</strong> 내에서도 승인하실 수 있습니다.
+            PC에서 공동인증서 등록을 완료하셨다면, <strong>사장님 앱</strong>에서도 승인할 수 있습니다.
           </div>
         </div>
       </div>
@@ -436,7 +474,7 @@
           <span class="arrow">&#9660;</span>
         </button>
         <div class="accordion-body">
-          <div class="accordion-body-inner">공동인증서 만료 시 세금계산서 발행이 중단됩니다. 유효기간은 발급일로부터 1년이며, 만료 전에 인증서를 갱신하고 바로빌에서 <strong>재등록</strong>해 주세요.</div>
+          <div class="accordion-body-inner">만료 시 세금계산서 발행이 중단됩니다. 유효기간은 1년이며, 만료 전에 갱신 후 바로빌에서 <strong>재등록</strong>해 주세요.</div>
         </div>
       </div>
       <div class="accordion-item">
@@ -445,7 +483,7 @@
           <span class="arrow">&#9660;</span>
         </button>
         <div class="accordion-body">
-          <div class="accordion-body-inner">바로빌 인증서 등록에 필요한 <strong>nxtspkisetup</strong> 프로그램은 윈도우 PC에서만 설치 가능합니다. Mac이나 모바일에서는 인증서 등록을 진행할 수 없습니다.</div>
+          <div class="accordion-body-inner">인증서 등록에 필요한 <strong>nxtspkisetup</strong> 프로그램은 윈도우 PC 전용입니다. Mac, 모바일에서는 등록할 수 없습니다.</div>
         </div>
       </div>
       <div class="accordion-item">
@@ -467,9 +505,9 @@
         </button>
         <div class="accordion-body">
           <div class="accordion-body-inner">
-            공동인증서 등록은 새 창(팝업)에서 진행됩니다. 브라우저 팝업 차단이 해제되어 있는지 확인해 주세요.<br>
+            인증서 등록은 새 창(팝업)에서 진행됩니다. 팝업 차단을 해제해 주세요.<br>
             Chrome: 주소창 오른쪽 팝업 차단 아이콘 > 허용<br>
-            Edge: 설정 > 쿠키 및 사이트 권한 > 팝업 및 리디렉션 > 허용
+            Edge: 설정 > 팝업 및 리디렉션 > 허용
           </div>
         </div>
       </div>
@@ -480,9 +518,9 @@
         </button>
         <div class="accordion-body">
           <div class="accordion-body-inner">
-            등록 가능한 인증서가 PC에 없는 경우입니다.<br>
-            전자세금용 또는 사업자 범용 인증서를 기업 인터넷뱅킹에서 발급받거나,
-            <a href="https://www.certbiz.com/landing/barobill" target="_blank" style="color:var(--primary);text-decoration:underline">바로빌 공동인증센터</a>에서 직접 발급받은 뒤 다시 진행해 주세요.
+            PC에 등록 가능한 인증서가 없는 경우입니다.<br>
+            기업 인터넷뱅킹에서 전자세금용 인증서를 발급받거나,
+            <a href="https://www.certbiz.com/landing/barobill" target="_blank" style="color:var(--primary);text-decoration:underline">바로빌 공동인증센터</a>에서 발급 후 다시 진행해 주세요.
           </div>
         </div>
       </div>
